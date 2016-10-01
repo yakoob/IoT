@@ -23,3 +23,6 @@ dependencies
 .slcache/.index
 
 *.bytes
+
+*.hprof
+*.mp4
