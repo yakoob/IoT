@@ -205,8 +205,6 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
 
                                         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-                                        int origionalVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-
 
                                         if (video.getName().equals(Video.Name.WOODS)) {
 
