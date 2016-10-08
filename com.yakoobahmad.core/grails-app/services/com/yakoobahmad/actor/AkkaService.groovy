@@ -28,6 +28,7 @@ class AkkaService {
     ActorRef clusterListener
     ActorRef halloweenManager
     ActorRef christmasManger
+    ActorRef soundDetection
 
     PageRenderer groovyPageRenderer
 
@@ -57,6 +58,7 @@ class AkkaService {
         clusterListener = actorOf(ClusterListener, "ClusterListener")
         halloweenManager = actorOf(com.yakoobahmad.actor.halloween.Manager, "HalloweenManager")
         christmasManger = actorOf(com.yakoobahmad.actor.christmas.Manager, "ChristmasManger")
+        soundDetection = actorOf(com.yakoobahmad.actor.device.SoundDetection, "SoundDetection")
     }
 
     ActorRef actorNoSender() {

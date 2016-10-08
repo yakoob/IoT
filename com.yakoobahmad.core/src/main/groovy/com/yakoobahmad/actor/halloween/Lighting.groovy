@@ -3,6 +3,7 @@ package com.yakoobahmad.actor.halloween
 import akka.actor.ActorRef
 import akka.actor.Props
 import com.yakoobahmad.actor.BaseActor
+import com.yakoobahmad.event.SoundDetectionCalculationComplete
 import com.yakoobahmad.halloween.light.Hue
 import groovy.util.logging.Log
 
@@ -25,7 +26,11 @@ class Lighting extends BaseActor {
     @Override
     void onReceive(Object message) throws Exception {
 
-        lightRearCenter.tell(message, self)
+        if (message instanceof SoundDetectionCalculationComplete){
+            lightRearLeft.tell(message, self)
+            lightRearCenter.tell(message, self)
+            lightRearRight.tell(message, self)
+        }
 
     }
 

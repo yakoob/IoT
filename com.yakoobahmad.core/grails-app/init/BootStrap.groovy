@@ -30,6 +30,7 @@ class BootStrap {
         new Video(name: Video.Name.MONSTER_MASH).save()
         new Video(name: Video.Name.WHATS_THIS).save()
         new Video(name: Video.Name.THIS_IS_HALLOWEEN).save()
+        new Video(name: Video.Name.OOGIE_BOOGIE_PUMPKINS).save()
 
         new ColorHue(description: Color.Name.PURPLE, red: "0.7117647058823499", green: "0.9724025974025973", blue: "0.9042207792207793").save()
         new ColorHue(description: Color.Name.BLUE, red: "0.6562091503267974", green: "0.9529220779220778", blue: "0.9334415584415585").save()

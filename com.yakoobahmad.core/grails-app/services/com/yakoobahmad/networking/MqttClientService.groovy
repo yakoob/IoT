@@ -1,6 +1,9 @@
 package com.yakoobahmad.networking
 
+import com.yakoobahmad.command.video.Play
+import com.yakoobahmad.event.SoundDetected
 import groovy.util.logging.Log
+import groovy.util.logging.Log4j
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttClient
@@ -8,7 +11,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import org.springframework.beans.factory.annotation.Value
 
-@Log
+@Log4j
 class MqttClientService implements MqttCallback {
 
     public MqttClient mqttClient
@@ -24,6 +27,7 @@ class MqttClientService implements MqttCallback {
 
     def akkaService
     def serverService
+    def mqttSerializerService
 
     void init() {
         if (connectOnStartup) {
@@ -41,24 +45,27 @@ class MqttClientService implements MqttCallback {
 
     @Override
     public void connectionLost(Throwable cause) {
-        log.severe "connectionLost: ${cause.message} ${cause.stackTrace}"
+        log.error "connectionLost: ${cause.message} ${cause.stackTrace}"
         sleep(5000)
         mqttClient = null
         init()
     }
 
     @Override
-    public void messageArrived(String topic, MqttMessage message) {
+    public void messageArrived(String topic, MqttMessage m) {
         try {
 
-            /*
-            Command command = messageSerializerService.serialize(topic, state?.toString())
-            if (command)
-                akkaService.getHalloweenManager().tell(command, akkaService.actorNoSender())
-              */
+            def message = mqttSerializerService.serialize(topic, m?.toString())
+
+            if (message instanceof SoundDetected)
+                akkaService.soundDetection.tell(message, akkaService.actorNoSender())
+            else if (message instanceof Play)
+                akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
+
             log.info "mqtt messageArrived >> topic:$topic | ${message.toString()}"
+
         } catch (e) {
-            log.severe e.stackTrace
+            log.error e.stackTrace
         }
     }
 
@@ -73,7 +80,7 @@ class MqttClientService implements MqttCallback {
             message.setPayload(payload.bytes)
             mqttClient.publish(topic, message)
         }
-        log.severe("can not publish message $payload because mqttClient not configured")
+        log.error("can not publish message $payload because mqttClient not configured")
     }
 
 }

@@ -2,7 +2,6 @@ package com.yakoobahmad.networking
 
 import grails.transaction.Transactional
 import groovyx.net.http.AsyncHTTPBuilder
-import static groovyx.net.http.ContentType.HTML
 
 @Transactional
 class HttpClientService {

@@ -97,7 +97,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                     MqttMessage m = new MqttMessage();
                     String video = "{\"command\":\"songComplete\"}";
                     m.setPayload(video.getBytes());
-                    client.publish("ActorSystem/Halloween", m);
+                    client.publish("ActorSystem/Halloween/Projector", m);
 
                 } catch (MqttException e) {
 

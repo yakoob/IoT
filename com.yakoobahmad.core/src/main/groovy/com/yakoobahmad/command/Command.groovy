@@ -9,4 +9,6 @@ class Command implements Serializable {
         this.class.simpleName
     }
 
+    def payload
+
 }

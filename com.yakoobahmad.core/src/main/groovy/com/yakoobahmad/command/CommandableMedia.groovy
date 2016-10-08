@@ -2,6 +2,9 @@ package com.yakoobahmad.command
 
 import com.yakoobahmad.domain.Media
 
+/**
+ * Created by yakoobahmad on 9/29/16.
+ */
 trait CommandableMedia {
 
     Media media

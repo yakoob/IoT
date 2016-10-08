@@ -139,3 +139,25 @@ grails:
     config:
         locations:
             - ~/.grails/core_config.yml
+
+automation:
+    homeGenie:
+        host: 192.168.20.114
+    arduino:
+        sound:
+            host: 192.168.20.211
+            detectionBuffer:
+                size: 5
+            detectionAvgDeviation:
+                none: 3
+                lite: 7
+        smoke:
+            host: 192.168.20.157
+            status: false
+
+
+
+
+
+
+

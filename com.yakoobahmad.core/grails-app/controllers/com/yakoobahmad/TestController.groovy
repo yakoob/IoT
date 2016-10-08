@@ -17,6 +17,7 @@ class TestController {
 
     def index() {
 
+        /*
         akkaService.halloweenManager.tell(new BlowSmoke(), ActorRef.noSender())
 
         sleep(5000)
@@ -37,6 +38,21 @@ class TestController {
         sleep(1000)
 
         akkaService.halloweenManager.tell("SHOW_CURRENT_STATE", ActorRef.noSender())
+
+
+        akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.OOGIE_BOOGIE_PUMPKINS)), ActorRef.noSender())
+*/
+
+        // akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.OOGIE_BOOGIE_PUMPKINS)), ActorRef.noSender())
+
+
+        akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.OOGIE_BOOGIE_PUMPKINS)), ActorRef.noSender())
+
+        // sleep(400000)
+
+        // akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.WOODS)), ActorRef.noSender())
+
+
 
         render "foo"
     }

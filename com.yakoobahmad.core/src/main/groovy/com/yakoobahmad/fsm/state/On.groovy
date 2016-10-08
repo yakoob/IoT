@@ -1,3 +1,7 @@
 package com.yakoobahmad.fsm.state
 
-class On implements State {}
+class On implements State {
+
+
+
+}
