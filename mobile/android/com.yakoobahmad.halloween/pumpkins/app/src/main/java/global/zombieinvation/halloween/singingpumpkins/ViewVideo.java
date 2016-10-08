@@ -1,6 +1,8 @@
 package global.zombieinvation.halloween.singingpumpkins;
 
 import android.app.Activity;
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +35,8 @@ import android.media.MediaPlayer.OnTimedTextListener;
 import android.media.MediaPlayer.TrackInfo;
 import android.media.TimedText;
 
+import static android.media.AudioManager.ADJUST_LOWER;
+import static android.media.AudioManager.ADJUST_RAISE;
 import static java.lang.Thread.sleep;
 
 public class ViewVideo extends Activity implements MqttCallback, OnTimedTextListener {
@@ -43,6 +47,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
     private static int vid = 0;
     private static int sub = 0;
+    private static Video video;
 
     MqttClient client;
 
@@ -148,7 +153,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
         try {
 
-            Video video = new Gson().fromJson(message.toString(), Video.class);
+            video = new Gson().fromJson(message.toString(), Video.class);
 
             Log.d("HalloweenVideoPlayer", "command:" + video.getCommand() + " | song:" + video.getName());
 
@@ -174,8 +179,10 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                 } else if (video.getName().equals(Video.Name.MONSTER_MASH)) {
                     vid = R.raw.halloween_mm;
                     sub = R.raw.halloween_mm_sub;
+                } else if (video.getName().equals(Video.Name.OOGIE_BOOGIE_PUMPKINS)) {
+                    vid = R.raw.halloween_obp;
+                    sub = R.raw.halloween_obp_sub;
                 }
-
 
                 handler.post(new Runnable() {
                     @Override
@@ -185,6 +192,8 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
+
+
                                 vv.setVideoURI(Uri.parse("android.resource://" + getPackageName() + "/" + vid));
                                 vv.requestFocus();
                                 vv.setOnPreparedListener( new MediaPlayer.OnPreparedListener() {
@@ -193,9 +202,36 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                                         mediaPlayer = pMp;
                                         mediaPlayer.setLooping(true);
                                         setMediaTextCallBack(sub);
+
+
+                                        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                                        int origionalVolume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+
+
+                                        if (video.getName().equals(Video.Name.WOODS)) {
+
+                                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
+                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
+                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
+                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
+                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
+
+                                        } else {
+
+                                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+
+                                        }
+
+
                                     }
                                 });
+
                                 vv.start();
+
+
+
+
                             }
                         }, 200);
                     }
@@ -385,7 +421,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
 class Video {
 
-    enum Name {NONE,WOODS,GRIM_GRINNING_GHOST,KIDNAP_SANDY_CLAWS,MONSTER_MASH,THIS_IS_HALLOWEEN,WHATS_THIS}
+    enum Name {NONE,WOODS,GRIM_GRINNING_GHOST,KIDNAP_SANDY_CLAWS,MONSTER_MASH,THIS_IS_HALLOWEEN,WHATS_THIS,OOGIE_BOOGIE_PUMPKINS}
 
     private Name name;
     private String command;
