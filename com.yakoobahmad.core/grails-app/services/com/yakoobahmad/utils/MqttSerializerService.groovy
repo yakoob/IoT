@@ -1,6 +1,7 @@
 package com.yakoobahmad.utils
 
 import com.yakoobahmad.command.video.Play
+import com.yakoobahmad.event.MediaPlaybackComplete
 import com.yakoobahmad.event.SoundDetected
 import com.yakoobahmad.halloween.Video
 import grails.converters.JSON
@@ -21,7 +22,7 @@ class MqttSerializerService {
         else if (topic.contains("ActorSystem/Halloween/Projector")){
             def json = JSON.parse(message)
             if (json.command == "songComplete")
-                return new Play(media: Video.findByName(Video.Name.WOODS))
+                return new MediaPlaybackComplete()
         }
 
     }

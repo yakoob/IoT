@@ -1,6 +1,7 @@
 package com.yakoobahmad.networking
 
 import com.yakoobahmad.command.video.Play
+import com.yakoobahmad.event.MediaPlaybackComplete
 import com.yakoobahmad.event.SoundDetected
 import groovy.util.logging.Log
 import groovy.util.logging.Log4j
@@ -59,7 +60,7 @@ class MqttClientService implements MqttCallback {
 
             if (message instanceof SoundDetected)
                 akkaService.soundDetection.tell(message, akkaService.actorNoSender())
-            else if (message instanceof Play)
+            else if (message instanceof MediaPlaybackComplete)
                 akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
 
             log.info "mqtt messageArrived >> topic:$topic | ${message.toString()}"

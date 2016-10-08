@@ -1,11 +1,13 @@
 package com.yakoobahmad.actor.halloween
 
+import akka.actor.ActorRef
 import com.yakoobahmad.actor.BaseActor
 import com.yakoobahmad.command.Command
 import com.yakoobahmad.command.CommandableMedia
 import com.yakoobahmad.command.video.Pause
 import com.yakoobahmad.command.video.Play
 import com.yakoobahmad.command.video.Resume
+import com.yakoobahmad.event.MediaPlaybackComplete
 import com.yakoobahmad.fsm.FSM
 import com.yakoobahmad.fsm.Guard
 import com.yakoobahmad.fsm.state.Any
@@ -24,10 +26,14 @@ class Projector extends BaseActor implements FSM {
 
     Video currentVideo
 
+    Video woods
+
     Projector(){
         Video.withNewSession {
             currentVideo = Video.findByName(Video.Name.NONE)
+            woods = Video.findByName(Video.Name.WOODS)
         }
+
         startStateMachine(Off)
         configureFsmDsl()
 
@@ -41,6 +47,9 @@ class Projector extends BaseActor implements FSM {
 
         else if (message instanceof Command)
             fsm.fire(message)
+
+        else if (message instanceof MediaPlaybackComplete)
+            self.tell(new Play(media: woods), ActorRef.noSender())
 
     }
 

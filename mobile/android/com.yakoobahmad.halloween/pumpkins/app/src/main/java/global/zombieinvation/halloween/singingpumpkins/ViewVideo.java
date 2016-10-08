@@ -87,24 +87,8 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
         super.onCreate(savedInstanceState);
 
         vv = new VideoView(getApplicationContext());
+
         setContentView(vv);
-        vv.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mediaPlayer) {
-
-                try {
-
-                    MqttMessage m = new MqttMessage();
-                    String video = "{\"command\":\"songComplete\"}";
-                    m.setPayload(video.getBytes());
-                    client.publish("ActorSystem/Halloween/Projector", m);
-
-                } catch (MqttException e) {
-
-                }
-
-            }
-        });
 
         try {
             playWoods();
@@ -224,6 +208,27 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
                                     }
                                 });
+
+                                vv.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                    @Override
+                                    public void onCompletion(MediaPlayer pMp) {
+
+                                        try {
+
+                                            MqttMessage m = new MqttMessage();
+                                            String mm = "{\"command\":\"songComplete\"}";
+                                            m.setPayload(mm.getBytes());
+                                            client.publish("ActorSystem/Halloween/Projector", m);
+
+                                            Log.d("complete", "song finished!!!");
+
+                                        } catch (MqttException e) {
+                                            Log.e("MQTT", e.getMessage());
+                                        }
+
+                                    }
+                                });
+
 
                                 vv.start();
 
