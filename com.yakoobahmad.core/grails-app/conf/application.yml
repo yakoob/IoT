@@ -157,6 +157,7 @@ automation:
 
 
 twitter:
+    enabled: false
     consumerKey: customerKey
     consumerSecret: customerSeceret
     accessToken:  token

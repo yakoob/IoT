@@ -1,5 +1,6 @@
 package com.yakoobahmad
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import com.yakoobahmad.actor.social.Tweet
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Value
@@ -9,6 +10,9 @@ import org.springframework.social.twitter.api.impl.TwitterTemplate
 class TwitterService {
 
     static transactional = false
+
+    @Value('${twitter.enabled}')
+    Boolean enabled
 
     @Value('${twitter.consumerKey}')
     String consumerKey
@@ -27,9 +31,10 @@ class TwitterService {
         return twitterOperations
     }
 
-
-
     def mentions(lastId=null){
+
+        if(!enabled)
+            return
 
         def twts
 
