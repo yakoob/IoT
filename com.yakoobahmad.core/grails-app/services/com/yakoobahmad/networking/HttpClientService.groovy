@@ -17,7 +17,7 @@ class HttpClientService {
 
         http.get(path:uri)
 
-        println uri
+        // println uri
 
     }
 

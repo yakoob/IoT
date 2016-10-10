@@ -4,6 +4,7 @@ import com.yakoobahmad.halloween.Video
 import com.yakoobahmad.halloween.light.Hue
 import com.yakoobahmad.visualization.Color
 import com.yakoobahmad.visualization.ColorHue
+import org.springframework.social.twitter.api.impl.TwitterTemplate
 
 class BootStrap {
 
@@ -45,6 +46,8 @@ class BootStrap {
         new Hue(node: 2, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save()
         new Hue(node: 3, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save()
         new Hue(node: 4, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save()
+        new Hue(node: 5, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save()
+        new Hue(node: 6, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save()
 
     }
 }

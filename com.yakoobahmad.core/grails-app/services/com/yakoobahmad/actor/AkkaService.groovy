@@ -29,6 +29,7 @@ class AkkaService {
     ActorRef halloweenManager
     ActorRef christmasManger
     ActorRef soundDetection
+    ActorRef twitter
 
     PageRenderer groovyPageRenderer
 
@@ -59,6 +60,7 @@ class AkkaService {
         halloweenManager = actorOf(com.yakoobahmad.actor.halloween.Manager, "HalloweenManager")
         christmasManger = actorOf(com.yakoobahmad.actor.christmas.Manager, "ChristmasManger")
         soundDetection = actorOf(com.yakoobahmad.actor.device.SoundDetection, "SoundDetection")
+        twitter = actorOf(com.yakoobahmad.actor.social.Twitter, "Twitter")
     }
 
     ActorRef actorNoSender() {

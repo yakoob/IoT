@@ -22,7 +22,7 @@ if (Environment.isDevelopmentMode() && targetDir != null) {
     logger("StackTrace", ERROR, ['FULL_STACKTRACE'], false)
     root(ERROR, ['STDOUT', 'FULL_STACKTRACE'])
 
-    logger("com.yakoobahmad", INFO)
+    // logger("com.yakoobahmad", INFO)
     logger("com.yakoobahmad", DEBUG)
 
 }

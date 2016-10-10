@@ -184,13 +184,15 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                                     @Override
                                     public void onPrepared(MediaPlayer pMp) {
                                         mediaPlayer = pMp;
-                                        mediaPlayer.setLooping(true);
+
                                         setMediaTextCallBack(sub);
 
 
                                         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 
                                         if (video.getName().equals(Video.Name.WOODS)) {
+
+                                            mediaPlayer.setLooping(true);
 
                                             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
                                             audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
@@ -203,6 +205,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
                                             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
 
+                                            mediaPlayer.setLooping(false);
                                         }
 
 

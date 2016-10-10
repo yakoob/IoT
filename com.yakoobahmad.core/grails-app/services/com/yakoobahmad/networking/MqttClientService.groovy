@@ -63,7 +63,7 @@ class MqttClientService implements MqttCallback {
             else if (message instanceof MediaPlaybackComplete)
                 akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
 
-            log.info "mqtt messageArrived >> topic:$topic | ${message.toString()}"
+            log.info "mqtt messageArrived >> topic:$topic | ${m.toString()}"
 
         } catch (e) {
             log.error e.stackTrace

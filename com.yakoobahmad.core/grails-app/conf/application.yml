@@ -20,7 +20,7 @@ spring:
 endpoints:
     enabled: false
     jmx:
-        enabled: true
+        enabled: false
 
 ---
 grails:
@@ -92,7 +92,7 @@ hibernate:
 
 dataSource:
     pooled: true
-    jmxExport: true
+    jmxExport: false
     driverClassName: org.h2.Driver
     username: sa
     password:
@@ -111,7 +111,7 @@ environments:
             dbCreate: none
             url: jdbc:h2:./prodDb;MVCC=TRUE;LOCK_TIMEOUT=10000;DB_CLOSE_ON_EXIT=FALSE
             properties:
-                jmxEnabled: true
+                jmxEnabled: false
                 initialSize: 5
                 maxActive: 50
                 minIdle: 5
@@ -156,8 +156,8 @@ automation:
             status: false
 
 
-
-
-
-
-
+twitter:
+    consumerKey: customerKey
+    consumerSecret: customerSeceret
+    accessToken:  token
+    accessTokenSecret: tokenSecret

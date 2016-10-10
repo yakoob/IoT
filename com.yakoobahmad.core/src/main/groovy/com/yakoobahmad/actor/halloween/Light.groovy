@@ -157,6 +157,18 @@ class Light extends BaseActor implements FSM {
                 res << colorList.find{it.description==Color.Name.PURPLE}
             }
 
+            if (self.path().name().contains("lightKitchenIsland")) {
+                res << colorList.find{it.description==Color.Name.PURPLE}
+            }
+
+            if (self.path().name().contains("lightPumpkinLeft")) {
+                res << colorList.find{it.description==Color.Name.PURPLE}
+            }
+
+            if (self.path().name().contains("lightPumpkinRight")) {
+                res << colorList.find{it.description==Color.Name.ORANGE}
+            }
+
         } else if (val <= 75 && fsm.currentState == On.name) {
 
             if (self.path().name().contains("lightRearLeft")) {
@@ -168,6 +180,19 @@ class Light extends BaseActor implements FSM {
             }
 
             if (self.path().name().contains("lightRearRight")) {
+                res << colorList.find{it.description==Color.Name.PINK}
+            }
+
+
+            if (self.path().name().contains("lightKitchenIsland")) {
+                res << colorList.find{it.description==Color.Name.ORANGE}
+            }
+
+            if (self.path().name().contains("lightPumpkinLeft")) {
+                res << colorList.find{it.description==Color.Name.ORANGE}
+            }
+
+            if (self.path().name().contains("lightPumpkinRight")) {
                 res << colorList.find{it.description==Color.Name.PINK}
             }
 
