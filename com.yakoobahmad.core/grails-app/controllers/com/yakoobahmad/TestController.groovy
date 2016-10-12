@@ -50,7 +50,7 @@ class TestController {
         akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.OOGIE_BOOGIE_PUMPKINS)), ActorRef.noSender())
         */
 
-        akkaService.halloweenManager.tell("SHOW_CURRENT_STATE", ActorRef.noSender())
+        // akkaService.halloweenManager.tell("SHOW_CURRENT_STATE", ActorRef.noSender())
 
         render "foo"
     }

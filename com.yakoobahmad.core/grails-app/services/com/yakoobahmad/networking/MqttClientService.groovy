@@ -1,10 +1,8 @@
 package com.yakoobahmad.networking
 
-import com.yakoobahmad.command.video.Play
 import com.yakoobahmad.event.MediaPlaybackComplete
 import com.yakoobahmad.event.SoundDetected
-import groovy.util.logging.Log
-import groovy.util.logging.Log4j
+import groovy.util.logging.Slf4j
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
 import org.eclipse.paho.client.mqttv3.MqttCallback
 import org.eclipse.paho.client.mqttv3.MqttClient
@@ -12,7 +10,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence
 import org.springframework.beans.factory.annotation.Value
 
-@Log4j
+@Slf4j
 class MqttClientService implements MqttCallback {
 
     public MqttClient mqttClient
@@ -63,7 +61,7 @@ class MqttClientService implements MqttCallback {
             else if (message instanceof MediaPlaybackComplete)
                 akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
 
-            log.info "mqtt messageArrived >> topic:$topic | ${m.toString()}"
+            log.debug "mqtt messageArrived >> topic:$topic | ${m.toString()}"
 
         } catch (e) {
             log.error e.stackTrace
@@ -72,7 +70,7 @@ class MqttClientService implements MqttCallback {
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        log.info "mqtt deliveryComplete: ${token.toString()}"
+        log.debug "mqtt deliveryComplete: ${token.toString()}"
     }
 
     def publish(String topic, String payload){
@@ -80,8 +78,9 @@ class MqttClientService implements MqttCallback {
             MqttMessage message=new MqttMessage()
             message.setPayload(payload.bytes)
             mqttClient.publish(topic, message)
+        } else {
+            log.error("can not publish message $payload because mqttClient not configured")
         }
-        log.error("can not publish message $payload because mqttClient not configured")
     }
 
 }

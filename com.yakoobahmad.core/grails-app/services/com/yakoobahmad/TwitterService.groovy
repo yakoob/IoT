@@ -33,8 +33,10 @@ class TwitterService {
 
     def mentions(lastId=null){
 
+        LinkedList<Tweet> tweets = new LinkedList<Tweet>()
+
         if(!enabled)
-            return
+            return tweets
 
         def twts
 
@@ -43,9 +45,7 @@ class TwitterService {
         else
             twts = twitterApi.timelineOperations().getMentions(200)
 
-        log.debug "fetching tweets: ${twts?.toListString()}"
-
-        LinkedList<Tweet> tweets = new LinkedList<Tweet>()
+        log.debug "fetched tweets: ${twts?.toListString()}"
 
         twts.sort{it.id}.each {
             tweets.addLast(new Tweet(id:it.id, text: it.text))

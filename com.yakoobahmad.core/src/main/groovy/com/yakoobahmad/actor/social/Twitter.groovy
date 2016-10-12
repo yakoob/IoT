@@ -92,7 +92,7 @@ class Twitter extends BaseActor {
 
                         def apiMentions = twitterService.mentions(lastId)
 
-                        if (apiMentions.size())
+                        if (apiMentions?.size())
                             lastId = apiMentions.sort{it.id}?.last()?.id
 
                         log.debug "gatherMentionsTimer running: API found:${apiMentions?.size()} tweets (${apiMentions?.toListString()}) with lastId: $lastId"

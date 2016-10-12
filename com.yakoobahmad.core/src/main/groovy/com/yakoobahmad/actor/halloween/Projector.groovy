@@ -29,6 +29,7 @@ class Projector extends BaseActor implements FSM {
 
     def jsonService = Holders.applicationContext.getBean("jsonService")
     def mqttClientService = Holders.applicationContext.getBean("mqttClientService")
+    def twitterService = Holders.applicationContext.getBean("twitterService")
 
     Video currentVideo
 
@@ -141,6 +142,9 @@ class Projector extends BaseActor implements FSM {
                 new Runnable() {
                     @Override
                     public void run() {
+
+                        if (!twitterService.enabled)
+                            return
 
                         log.debug "tell twitter actor to try next"
 
