@@ -325,7 +325,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                     if (textTrackIndex >= 0) {
                         mediaPlayer.selectTrack(textTrackIndex);
                     } else {
-                        Log.d("fuck", "Cannot find text track!");
+                        Log.d("error", "Cannot find text track!");
                     }
                     mediaPlayer.setOnTimedTextListener(thisVideoView);
 
