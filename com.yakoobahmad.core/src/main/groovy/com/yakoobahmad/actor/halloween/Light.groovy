@@ -1,6 +1,7 @@
 package com.yakoobahmad.actor.halloween
 
 import akka.actor.ActorRef
+import com.yakoobahmad.HueEffect
 import com.yakoobahmad.command.TurnOff
 import com.yakoobahmad.command.TurnOn
 import com.yakoobahmad.event.SoundDetectionCalculationComplete
@@ -26,11 +27,10 @@ class Light extends BaseActor implements FSM {
 
     Light(Hue hue) {
 
+        log.debug "starting hue light: ${hue.node}"
+
         Hue.withNewSession {
-
             light = hue
-
-
             colorList << Color.findByDescription(Color.Name.PURPLE)
             colorList << Color.findByDescription(Color.Name.ORANGE)
             colorList << Color.findByDescription(Color.Name.BLUE)
@@ -76,7 +76,6 @@ class Light extends BaseActor implements FSM {
                 if (fsm.currentState == Off.name)
                     self.tell(new TurnOn(payload: message?.clone()), ActorRef.noSender())
 
-                setLightLevel(avg)
                 setLightColor(avg)
 
             }
@@ -105,15 +104,11 @@ class Light extends BaseActor implements FSM {
     }
 
     void turnLightOn() {
-        httpClientService.execute("http://192.168.20.114/api/HomeAutomation.PhilipsHue/${light.node}", "Control.On")
+        httpClientService.put("http://192.168.20.153/api/23e3d7c3116a922f3c8b60bb2ce27da7/lights/${light.node}/state", new HueEffect(on: true))
     }
 
     void turnLightOff() {
-        httpClientService.execute("http://192.168.20.114/api/HomeAutomation.PhilipsHue/${light.node}", "Control.Off")
-    }
-
-    void setLightLevel(level) {
-        httpClientService.execute("http://192.168.20.114/api/HomeAutomation.PhilipsHue/${light.node}/Control.Level", "${level.toString()}")
+        httpClientService.put("http://192.168.20.153/api/23e3d7c3116a922f3c8b60bb2ce27da7/lights/${light.node}/state", new HueEffect(on: false))
     }
 
     void setLightColor(level) {
@@ -125,41 +120,23 @@ class Light extends BaseActor implements FSM {
 
         def res = []
 
+        BrightnessCatagory brightnessCatagory = getBrightness(val)
 
-
-
-
-        if (val == 0) {
+        if (brightnessCatagory == BrightnessCatagory.NONE) {
             // do nothing
-        } else if (val <= 5 && fsm.currentState == On.name) {
+        } else if (brightnessCatagory == BrightnessCatagory.SOME && fsm.currentState == On.name) {
 
             res << colorList.find{it.description==Color.Name.GREEN}
 
-        } else if (val <= 10 && fsm.currentState == On.name) {
+        } else if (brightnessCatagory == BrightnessCatagory.SOME_MORE && fsm.currentState == On.name) {
 
             res << colorList.find{it.description==Color.Name.BLUE}
 
-        } else if (val <= 25 && fsm.currentState == On.name) {
+        } else if (brightnessCatagory == BrightnessCatagory.HALF && fsm.currentState == On.name) {
 
             res << colorList.find{it.description==Color.Name.PURPLE}
 
-        } else if (val <= 50 && fsm.currentState == On.name) {
-
-            if (self.path().name().contains("lightRearLeft")) {
-                res << colorList.find{it.description==Color.Name.ORANGE}
-            }
-
-            if (self.path().name().contains("lightRearCenter")) {
-                res << colorList.find{it.description==Color.Name.PURPLE}
-            }
-
-            if (self.path().name().contains("lightRearRight")) {
-                res << colorList.find{it.description==Color.Name.PURPLE}
-            }
-
-            if (self.path().name().contains("lightKitchenIsland")) {
-                res << colorList.find{it.description==Color.Name.PURPLE}
-            }
+        } else if (brightnessCatagory == BrightnessCatagory.MORE && fsm.currentState == On.name) {
 
             if (self.path().name().contains("lightPumpkinLeft")) {
                 res << colorList.find{it.description==Color.Name.PURPLE}
@@ -169,46 +146,19 @@ class Light extends BaseActor implements FSM {
                 res << colorList.find{it.description==Color.Name.ORANGE}
             }
 
-        } else if (val <= 75 && fsm.currentState == On.name) {
-
-            if (self.path().name().contains("lightRearLeft")) {
-                res << colorList.find{it.description==Color.Name.PURPLE}
-            }
-
-            if (self.path().name().contains("lightRearCenter")) {
-                res << colorList.find{it.description==Color.Name.ORANGE}
-            }
-
-            if (self.path().name().contains("lightRearRight")) {
-                res << colorList.find{it.description==Color.Name.PINK}
-            }
-
-
-            if (self.path().name().contains("lightKitchenIsland")) {
-                res << colorList.find{it.description==Color.Name.ORANGE}
-            }
-
-            if (self.path().name().contains("lightPumpkinLeft")) {
-                res << colorList.find{it.description==Color.Name.ORANGE}
-            }
-
-            if (self.path().name().contains("lightPumpkinRight")) {
-                res << colorList.find{it.description==Color.Name.PINK}
-            }
-
-
-        } else if (val > 75 && fsm.currentState == On.name) {
+        } else if (brightnessCatagory == BrightnessCatagory.FULL && fsm.currentState == On.name) {
 
             res << colorList.find{it.description==Color.Name.PURPLE}
             res << colorList.find{it.description==Color.Name.ORANGE}
-            res << colorList.find{it.description==Color.Name.PURPLE}
+            res << colorList.find{it.description==Color.Name.RED}
 
         }
 
         if (res.size()) {
             res.each { Color color ->
                 if (color instanceof ColorHue) {
-                    httpClientService.execute("http://192.168.20.114/api/HomeAutomation.PhilipsHue/${light.node}/Control.ColorHsb", "${color.RGB}")
+                    color.hue.bri = brightnessCatagory.value
+                    httpClientService.put("http://192.168.20.153/api/23e3d7c3116a922f3c8b60bb2ce27da7/lights/${light.node}/state", color.hue)
                 }
             }
         }
@@ -216,4 +166,30 @@ class Light extends BaseActor implements FSM {
 
     }
 
+
+
+    public enum BrightnessCatagory {
+        NONE(0),SOME(25),SOME_MORE(50),HALF(125),MORE(200),FULL(255)
+        private final int id
+        BrightnessCatagory(int id) { this.id = id }
+        public int getValue() { return id }
+    }
+
+    private BrightnessCatagory getBrightness(val){
+
+        if (val == 0) {
+            return BrightnessCatagory.NONE
+        } else if (val <= 10) {
+            return BrightnessCatagory.SOME
+        } else if (val <= 25) {
+            return BrightnessCatagory.SOME_MORE
+        } else if (val <= 50) {
+            return BrightnessCatagory.HALF
+        } else if (val <= 75) {
+            return BrightnessCatagory.MORE
+        } else {
+            return BrightnessCatagory.FULL
+        }
+
+    }
 }

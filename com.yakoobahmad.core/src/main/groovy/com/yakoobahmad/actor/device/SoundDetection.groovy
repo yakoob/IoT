@@ -22,10 +22,10 @@ class SoundDetection extends BaseActor {
     private Integer detectionBufferSize = 5
 
     // @Value('${automation.arduino.sound.detectionAvgDeviation.none}')
-    private Integer detectionAvgDeviationNone = 3
+    private Integer detectionAvgDeviationNone = 5
 
     // @Value('${automation.arduino.sound.detectionAvgDeviation.lite}')
-    private Integer detectionAvgDeviationLite = 7
+    private Integer detectionAvgDeviationLite = 10
 
     SoundDetection(){
         // test()

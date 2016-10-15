@@ -1,3 +1,8 @@
+grails:
+    config:
+        locations:
+            - file:///deployments/core_config.yml
+
 ---
 grails:
     profile: web
@@ -129,33 +134,30 @@ environments:
                 jdbcInterceptors: ConnectionState
                 defaultTransactionIsolation: 2 # TRANSACTION_READ_COMMITTED
 
+---
 mqtt:
     client:
         connectOnStartUp: false
-        ip: '127.0.0.1'
-        port: '1883'
+        ip: 127.0.0.1
+        port: 1883
 
-grails:
-    config:
-        locations:
-            - ~/.grails/core_config.yml
-
+---
 automation:
     homeGenie:
-        host: 192.168.20.114
+        host: 127.0.0.1
     arduino:
         sound:
-            host: 192.168.20.211
+            host: 127.0.0.1
             detectionBuffer:
                 size: 5
             detectionAvgDeviation:
                 none: 3
                 lite: 7
         smoke:
-            host: 192.168.20.157
+            host: 127.0.0.1
             status: false
 
-
+---
 twitter:
     enabled: false
     consumerKey: customerKey

@@ -1,13 +1,15 @@
 package com.yakoobahmad.networking
 
+import com.yakoobahmad.HueEffect
+import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
 import groovyx.net.http.AsyncHTTPBuilder
+import static grails.async.Promises.*
 
 @Transactional
 class HttpClientService {
 
-    def http = new AsyncHTTPBuilder(poolSize : 1)
-
+    AsyncHTTPBuilder http = new AsyncHTTPBuilder(poolSize : 1)
 
     def execute(String url, String path) {
 
@@ -19,6 +21,23 @@ class HttpClientService {
 
         // println uri
 
+    }
+
+    def put(String url, HueEffect hueEffect) {
+
+        RestBuilder rest = new RestBuilder()
+        task {
+            def resp = rest.put(url){
+                contentType "application/json"
+                json {
+                    on = hueEffect.on
+                    bri = hueEffect.bri
+                    sat = hueEffect.sat
+                    hue = hueEffect.hue
+                    effect = "hueEffect"
+                }
+            }
+        }
     }
 
 }
