@@ -24,7 +24,6 @@ class BootStrap {
         new Smoke(name: Smoke.Name.HALLOWEEN_REAR, position: 20, state: Smoke.State.OFF).save()
         new Smoke(name: Smoke.Name.HALLOWEEN_REAR, position: 60, state: Smoke.State.ON).save()
 
-        new Video(name: Video.Name.NONE).save()
         new Video(name: Video.Name.WOODS).save()
         new Video(name: Video.Name.GRIM_GRINNING_GHOST).save()
         new Video(name: Video.Name.KIDNAP_SANDY_CLAWS).save()

@@ -20,6 +20,7 @@ import com.yakoobahmad.halloween.Video
 import grails.util.Holders
 import groovy.util.logging.Log
 import groovy.util.logging.Slf4j
+import org.omg.CORBA.INTERNAL
 import scala.concurrent.duration.Duration
 
 import java.util.concurrent.TimeUnit
@@ -38,11 +39,14 @@ class Projector extends BaseActor implements FSM {
     Cancellable randomVideoTimer
     Cancellable twitterMentionsTimer
 
+    Integer randomVideoFailedCounter = 0
+
     Projector(){
 
         Video.withNewSession {
-            currentVideo = Video.findByName(Video.Name.WOODS)
-            woods = Video.findByName(Video.Name.WOODS)
+            def w = Video.findByName(Video.Name.WOODS)
+            currentVideo = w
+            woods = w
         }
 
         startStateMachine(Off)
@@ -116,16 +120,43 @@ class Projector extends BaseActor implements FSM {
                     @Override
                     public void run() {
 
-                        log.debug "playing random video"
+                        try{
 
-                        if (currentVideo?.id == woods?.id){
+                            log.debug "playing random video"
+
                             Video.withNewSession {
+
                                 def videos = Video.findAll()
+
+                                videos.remove(woods)
+                                videos.remove(currentVideo)
+
                                 Collections.shuffle(videos)
-                                self.tell(new Play(media: videos.first()), ActorRef.noSender())
+
+                                def selectedVideo = videos.first()
+
+                                if (currentVideo?.id == woods?.id){
+
+                                    self.tell(new Play(media: selectedVideo), ActorRef.noSender())
+
+                                } else {
+
+                                    log.debug "could not play random video becuase current video is ${currentVideo.name}"
+
+                                    if (randomVideoFailedCounter >= 2) {
+
+                                        log.debug "actorSystem out of sync with android so kick off a new video to get them back in sync"
+                                        randomVideoFailedCounter = 0
+                                        self.tell(new Play(media: selectedVideo), ActorRef.noSender())
+
+                                    } else {
+                                        randomVideoFailedCounter + 1
+                                    }
+
+                                }
                             }
-                        } else {
-                            log.debug "could not play random video"
+                        } catch(e){
+                            e.printStackTrace()
                         }
 
 
@@ -139,28 +170,28 @@ class Projector extends BaseActor implements FSM {
     private void startTwitterMentionsTimer(){
 
         twitterMentionsTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.SECONDS),
-                new Runnable() {
-                    @Override
-                    public void run() {
+            new Runnable() {
+                @Override
+                public void run() {
 
-                        if (!twitterService.enabled)
-                            return
+                    if (!twitterService.enabled)
+                        return
 
-                        log.debug "tell twitter actor to try next"
+                    log.debug "tell twitter actor to try next"
 
-                        log.debug "current media: ${currentVideo.name}"
+                    log.debug "current media: ${currentVideo.name}"
 
-                        if (currentVideo?.id == woods?.id){
+                    if (currentVideo?.id == woods?.id){
 
-                            akkaService.twitter.tell("NEXT", self)
+                        akkaService.twitter.tell("NEXT", self)
 
-                        } else {
-                            log.debug "media in progress try again"
-                        }
-
-
+                    } else {
+                        log.debug "media in progress try again"
                     }
-                }, context.system().dispatcher())
+
+
+                }
+            }, context.system().dispatcher())
 
 
     }
