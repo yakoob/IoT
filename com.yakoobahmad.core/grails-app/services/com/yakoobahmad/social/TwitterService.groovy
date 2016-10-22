@@ -1,4 +1,4 @@
-package com.yakoobahmad
+package com.yakoobahmad.social
 
 import com.sun.org.apache.xpath.internal.operations.Bool
 import com.yakoobahmad.actor.social.Tweet

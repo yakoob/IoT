@@ -1,4 +1,4 @@
-package com.yakoobahmad.domain
+package com.yakoobahmad.domain.media
 
 interface Media {
     String command

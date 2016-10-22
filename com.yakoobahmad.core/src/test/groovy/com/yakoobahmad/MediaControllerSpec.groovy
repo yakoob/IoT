@@ -1,14 +1,13 @@
 package com.yakoobahmad
 
-import com.yakoobahmad.social.TwitterService
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 /**
- * See the API for {@link grails.test.mixin.services.ServiceUnitTestMixin} for usage instructions
+ * See the API for {@link grails.test.mixin.web.ControllerUnitTestMixin} for usage instructions
  */
-@TestFor(TwitterService)
-class TwitterServiceSpec extends Specification {
+@TestFor(MediaController)
+class MediaControllerSpec extends Specification {
 
     def setup() {
     }

@@ -1,6 +1,6 @@
 package com.yakoobahmad.networking
 
-import com.yakoobahmad.HueEffect
+import com.yakoobahmad.domain.visualization.HueEffect
 import grails.plugins.rest.client.RestBuilder
 import grails.transaction.Transactional
 import groovyx.net.http.AsyncHTTPBuilder

@@ -1,9 +1,9 @@
 package com.yakoobahmad.actor.halloween
 
 import akka.actor.ActorRef
-import com.yakoobahmad.HueEffect
 import com.yakoobahmad.command.TurnOff
 import com.yakoobahmad.command.TurnOn
+import com.yakoobahmad.domain.visualization.HueEffect
 import com.yakoobahmad.event.SoundDetectionCalculationComplete
 import com.yakoobahmad.fsm.state.On
 import com.yakoobahmad.actor.BaseActor

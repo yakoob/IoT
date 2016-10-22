@@ -1,4 +1,4 @@
-import com.yakoobahmad.halloween.Video
+import com.yakoobahmad.media.Video
 
 model {
     Video obj

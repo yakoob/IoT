@@ -8,19 +8,20 @@ import com.yakoobahmad.command.CommandableMedia
 import com.yakoobahmad.command.video.Pause
 import com.yakoobahmad.command.video.Play
 import com.yakoobahmad.command.video.Resume
+import com.yakoobahmad.domain.media.Media
 import com.yakoobahmad.event.MediaPlaybackComplete
-import com.yakoobahmad.event.SoundDetected
+import com.yakoobahmad.event.MediaPlaybackStarted
+import com.yakoobahmad.event.MotionDetected
 import com.yakoobahmad.fsm.FSM
 import com.yakoobahmad.fsm.Guard
 import com.yakoobahmad.fsm.state.Any
 import com.yakoobahmad.fsm.state.Off
 import com.yakoobahmad.fsm.state.video.Paused
 import com.yakoobahmad.fsm.state.video.Playing
-import com.yakoobahmad.halloween.Video
+import com.yakoobahmad.media.Video
+import com.yakoobahmad.visualization.Color
 import grails.util.Holders
-import groovy.util.logging.Log
 import groovy.util.logging.Slf4j
-import org.omg.CORBA.INTERNAL
 import scala.concurrent.duration.Duration
 
 import java.util.concurrent.TimeUnit
@@ -33,13 +34,12 @@ class Projector extends BaseActor implements FSM {
     def twitterService = Holders.applicationContext.getBean("twitterService")
 
     Video currentVideo
+    Video previousVideo
 
     Video woods
 
     Cancellable randomVideoTimer
     Cancellable twitterMentionsTimer
-
-    Integer randomVideoFailedCounter = 0
 
     Projector(){
 
@@ -62,14 +62,29 @@ class Projector extends BaseActor implements FSM {
     @Override
     void onReceive(Object message) throws Exception {
 
-        if (message instanceof String && message == "SHOW_CURRENT_STATE")
-            fsm.showState()
+        if (message instanceof String && message == "SHOW_CURRENT_STATE"){
 
-        else if (message instanceof Command)
+            fsm.showState()
+            log.info "currentVideo:${currentVideo?.name} | previousVideo: ${previousVideo?.name}"
+
+        } else if (message instanceof Command) {
+
             fsm.fire(message)
 
-        else if (message instanceof MediaPlaybackComplete)
+        } else if (message instanceof MediaPlaybackComplete) {
+
             self.tell(new Play(media: woods), ActorRef.noSender())
+
+        } else if (message instanceof MediaPlaybackStarted) {
+            if (message.media instanceof Video) {
+                this.currentVideo = message.media
+            }
+        } else if (message instanceof MotionDetected){
+            if (currentVideoIsWoods()){
+                randomVideoTimer?.cancel()
+                startRandomVideoTimer()
+            }
+        }
 
     }
 
@@ -87,7 +102,7 @@ class Projector extends BaseActor implements FSM {
 
         fsm.record().onCommands([Resume]).fromState(Paused).goToState(Playing).transition = { Command command ->
 
-            if (!currentVideo || currentVideo == Video.Name.NONE)
+            if (!currentVideo)
                 return new Guard(reason: "ineligible video for command:Resume")
 
             remoteDispatch(command)
@@ -99,6 +114,9 @@ class Projector extends BaseActor implements FSM {
     private void remoteDispatch(Command command){
 
         if (command instanceof CommandableMedia) {
+
+            if ( !currentVideoIsWoods() )
+                this.previousVideo = this.currentVideo
 
             this.currentVideo = command?.media
 
@@ -115,7 +133,7 @@ class Projector extends BaseActor implements FSM {
 
     private void startRandomVideoTimer(){
 
-        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(8, TimeUnit.MINUTES),
+        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.MINUTES),
                 new Runnable() {
                     @Override
                     public void run() {
@@ -128,31 +146,24 @@ class Projector extends BaseActor implements FSM {
 
                                 def videos = Video.findAll()
 
-                                videos.remove(woods)
-                                videos.remove(currentVideo)
+                                if(videos?.size()){
 
-                                Collections.shuffle(videos)
+                                    videos.removeAll([woods,previousVideo])
 
-                                def selectedVideo = videos.first()
+                                    Collections.shuffle(videos)
 
-                                if (currentVideo?.id == woods?.id){
+                                    Video selectedVideo = videos?.first()
 
-                                    self.tell(new Play(media: selectedVideo), ActorRef.noSender())
+                                    log.debug "selectedVideo is ${selectedVideo.name}"
 
-                                } else {
-
-                                    log.debug "could not play random video becuase current video is ${currentVideo.name}"
-
-                                    if (randomVideoFailedCounter >= 2) {
-
-                                        log.debug "actorSystem out of sync with android so kick off a new video to get them back in sync"
-                                        randomVideoFailedCounter = 0
+                                    if ( currentVideoIsWoods() ){
                                         self.tell(new Play(media: selectedVideo), ActorRef.noSender())
-
                                     } else {
-                                        randomVideoFailedCounter + 1
+                                        log.warn "can not play random video because currentVideo is not WOODS"
                                     }
 
+                                } else {
+                                    log.warn "no videos found!!!"
                                 }
                             }
                         } catch(e){
@@ -181,7 +192,7 @@ class Projector extends BaseActor implements FSM {
 
                     log.debug "current media: ${currentVideo.name}"
 
-                    if (currentVideo?.id == woods?.id){
+                    if (currentVideoIsWoods()){
 
                         akkaService.twitter.tell("NEXT", self)
 
@@ -196,5 +207,8 @@ class Projector extends BaseActor implements FSM {
 
     }
 
+    boolean currentVideoIsWoods(){
+        return currentVideo?.name == Video.Name.WOODS
+    }
 }
 

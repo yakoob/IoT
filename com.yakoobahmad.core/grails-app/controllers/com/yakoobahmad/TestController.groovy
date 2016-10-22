@@ -1,15 +1,6 @@
 package com.yakoobahmad
 
-import akka.actor.Actor
 import akka.actor.ActorRef
-import com.yakoobahmad.command.halloween.*
-import com.yakoobahmad.command.video.Pause
-import com.yakoobahmad.command.video.Play
-import com.yakoobahmad.command.video.Resume
-import com.yakoobahmad.device.Light
-import com.yakoobahmad.event.SoundDetectionCalculationComplete
-import com.yakoobahmad.halloween.Video
-import groovy.transform.TupleConstructor
 import groovy.util.logging.Log
 
 @Log
@@ -30,23 +21,9 @@ class TestController {
         akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.OOGIE_BOOGIE_PUMPKINS)), ActorRef.noSender())
         */
 
-        String text = params.t
 
-        if (text?.toUpperCase() == "GGG") {
-            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.GRIM_GRINNING_GHOST)), ActorRef.noSender())
-        } else if (text == "WT"){
-            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.WHATS_THIS)), ActorRef.noSender())
-        } else if (text == "OBP"){
-            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.OOGIE_BOOGIE_PUMPKINS)), ActorRef.noSender())
-        } else if (text == "KSC"){
-            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.KIDNAP_SANDY_CLAWS)), ActorRef.noSender())
-        } else if (text == "TIH"){
-            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.THIS_IS_HALLOWEEN)), ActorRef.noSender())
-        } else if (text == "MM"){
-            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.MONSTER_MASH)), ActorRef.noSender())
-        } else if (text == "WOODS"){
-            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.WOODS)), ActorRef.noSender())
-        }
+
+
 
         akkaService.halloweenManager.tell("SHOW_CURRENT_STATE", ActorRef.noSender())
 
@@ -62,12 +39,3 @@ class TestController {
 
 }
 
-@TupleConstructor
-class HueEffect {
-
-    def on = true
-    def bri = 255
-    def sat = 255
-    def hue = 30000
-
-}

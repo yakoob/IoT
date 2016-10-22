@@ -1,6 +1,6 @@
-package com.yakoobahmad.domain
+package com.yakoobahmad.domain.utils
 
-trait DomainSerializer implements Serializable {
+trait DomainSerializable implements Serializable {
 
     private static final long serialVersionUID = 10102020303040405050L
 

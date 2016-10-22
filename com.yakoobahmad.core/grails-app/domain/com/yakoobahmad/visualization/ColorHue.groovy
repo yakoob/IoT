@@ -1,6 +1,6 @@
 package com.yakoobahmad.visualization
 
-import com.yakoobahmad.HueEffect
+import com.yakoobahmad.domain.visualization.HueEffect
 
 class ColorHue extends Color {
 

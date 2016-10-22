@@ -1,6 +1,8 @@
 package com.yakoobahmad.networking
 
 import com.yakoobahmad.event.MediaPlaybackComplete
+import com.yakoobahmad.event.MediaPlaybackStarted
+import com.yakoobahmad.event.MotionDetected
 import com.yakoobahmad.event.SoundDetected
 import groovy.util.logging.Slf4j
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken
@@ -59,6 +61,10 @@ class MqttClientService implements MqttCallback {
             if (message instanceof SoundDetected)
                 akkaService.soundDetection.tell(message, akkaService.actorNoSender())
             else if (message instanceof MediaPlaybackComplete)
+                akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
+            else if (message instanceof MediaPlaybackStarted)
+                akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
+            else if (message instanceof MotionDetected)
                 akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
 
             log.debug "mqtt messageArrived >> topic:$topic | ${m.toString()}"

@@ -1,14 +1,15 @@
-package com.yakoobahmad.halloween
+package com.yakoobahmad.media
 
-import com.yakoobahmad.domain.DomainSerializer
-import com.yakoobahmad.domain.Media
+import com.yakoobahmad.domain.utils.DomainSerializable
+import com.yakoobahmad.domain.media.Media
 
-class Video implements DomainSerializer, Media {
+class Video implements DomainSerializable, Media {
 
     enum Name {WOODS,GRIM_GRINNING_GHOST,KIDNAP_SANDY_CLAWS,MONSTER_MASH,THIS_IS_HALLOWEEN,WHATS_THIS,OOGIE_BOOGIE_PUMPKINS}
 
     Name name
     String command
+    String event
 
     @Override
     public String getJsonTemplatePath(){
@@ -22,5 +23,6 @@ class Video implements DomainSerializer, Media {
 
     static constraints = {
         command nullable: true
+        event nullable: true
     }
 }

@@ -1,7 +1,9 @@
 package global.zombieinvation.halloween.singingpumpkins;
 
 import android.app.Activity;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -55,6 +57,12 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
     MediaPlayer mediaPlayer = null;
 
+
+    private static Context mContext;
+
+    public static ViewVideo instace;
+
+
     public ViewVideo() throws MqttException {
 
 
@@ -86,6 +94,8 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
         super.onCreate(savedInstanceState);
 
+        new MyDeviceAdminReceiver().onEnabled(getApplicationContext(), new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN));
+
         vv = new VideoView(getApplicationContext());
 
         setContentView(vv);
@@ -95,6 +105,13 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
         } catch (MqttException e) {
             e.printStackTrace();
         }
+
+        mContext = getApplicationContext();
+        instace = this;
+
+        startService(new Intent(this, StickyService.class));
+
+        Thread.setDefaultUncaughtExceptionHandler(new DefaultExceptionHandler(this, ViewVideo.class));
 
     }
 
@@ -207,6 +224,19 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
                                             mediaPlayer.setLooping(false);
                                         }
+
+                                        try {
+
+                                            Gson gson = new Gson();
+                                            MqttMessage m = new MqttMessage();
+                                            video.setEvent("playbackStarted");
+                                            m.setPayload(gson.toJson(video).getBytes());
+                                            client.publish("ActorSystem/Halloween/Projector", m);
+
+                                        } catch (MqttException e) {
+                                            Log.e("MQTT", e.getMessage());
+                                        }
+
 
 
                                     }
@@ -423,28 +453,14 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
             }
         }
     }
-}
 
-class Video {
-
-    enum Name {NONE,WOODS,GRIM_GRINNING_GHOST,KIDNAP_SANDY_CLAWS,MONSTER_MASH,THIS_IS_HALLOWEEN,WHATS_THIS,OOGIE_BOOGIE_PUMPKINS}
-
-    private Name name;
-    private String command;
-
-    public Name getName(){
-        return this.name;
+    @Override
+    public Context getApplicationContext() {
+        return super.getApplicationContext();
     }
 
-    public void setName(Name n){
-        this.name = n;
-    }
-
-    public String getCommand(){
-        return this.command;
-    }
-
-    public void setCommand(String c){
-        this.command = c;
+    public static ViewVideo getIntance() {
+        return instace;
     }
 }
+

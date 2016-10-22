@@ -4,12 +4,11 @@ import akka.actor.ActorRef
 import akka.actor.Cancellable
 import com.yakoobahmad.actor.BaseActor
 import com.yakoobahmad.command.video.Play
-import com.yakoobahmad.halloween.Video
+import com.yakoobahmad.media.Video
 import grails.util.Holders
 import groovy.transform.AutoClone
 import groovy.transform.ToString
 import groovy.transform.TupleConstructor
-import groovy.util.logging.Log4j
 import groovy.util.logging.Slf4j
 import scala.concurrent.duration.Duration
 

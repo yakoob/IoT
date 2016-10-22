@@ -1,10 +1,10 @@
 package com.yakoobahmad.device
 
-import com.yakoobahmad.domain.DomainSerializer
+import com.yakoobahmad.domain.utils.DomainSerializable
 import com.yakoobahmad.fsm.state.Off
 import com.yakoobahmad.fsm.state.On
 
-class Smoke implements DomainSerializer {
+class Smoke implements DomainSerializable {
 
     enum Name {HALLOWEEN_REAR}
     enum State {OFF,ON}

@@ -1,5 +1,6 @@
 package com.yakoobahmad.halloween
 
+import com.yakoobahmad.media.Video
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 

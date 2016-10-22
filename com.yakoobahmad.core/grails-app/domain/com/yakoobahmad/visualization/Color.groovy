@@ -1,7 +1,5 @@
 package com.yakoobahmad.visualization
 
-import com.yakoobahmad.HueEffect
-
 class Color {
 
     enum Name {PURPLE,BLUE,GREEN,PINK,ORANGE,RED,BLACK,WHITE}

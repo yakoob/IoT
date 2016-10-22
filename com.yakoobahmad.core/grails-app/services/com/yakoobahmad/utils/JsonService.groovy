@@ -1,6 +1,6 @@
 package com.yakoobahmad.utils
 
-import com.yakoobahmad.domain.DomainSerializer
+import com.yakoobahmad.domain.utils.DomainSerializable
 import grails.transaction.Transactional
 import grails.util.Holders
 import groovy.text.Template
@@ -10,7 +10,7 @@ class JsonService {
 
     def jsonViewTemplateEngine = Holders.applicationContext.getBean("jsonViewTemplateEngine")
 
-    def toJsonFromDomainTemplate(DomainSerializer domain) {
+    def toJsonFromDomainTemplate(DomainSerializable domain) {
         Template t = jsonViewTemplateEngine.resolveTemplate(domain.jsonTemplatePath)
         def writable = t.make(obj: domain)
         def sw = new StringWriter()
