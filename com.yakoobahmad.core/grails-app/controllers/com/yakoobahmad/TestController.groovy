@@ -1,6 +1,7 @@
 package com.yakoobahmad
 
 import akka.actor.ActorRef
+import com.yakoobahmad.command.halloween.BlowSmoke
 import groovy.util.logging.Log
 
 @Log
@@ -35,6 +36,11 @@ class TestController {
         */
 
         render "foo"
+    }
+
+    def smoke(){
+        akkaService.halloweenManager.tell(new BlowSmoke(), ActorRef.noSender())
+        render "smoke"
     }
 
 }

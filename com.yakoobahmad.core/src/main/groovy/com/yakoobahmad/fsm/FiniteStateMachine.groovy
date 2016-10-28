@@ -3,8 +3,10 @@ package com.yakoobahmad.fsm
 import com.yakoobahmad.command.Command
 import com.yakoobahmad.fsm.state.State
 import groovy.util.logging.Log
+import groovy.util.logging.Log4j
+import groovy.util.logging.Slf4j
 
-@Log
+@Slf4j
 class FiniteStateMachine {
 
     String parent
@@ -73,12 +75,16 @@ class FiniteStateMachine {
 
                 // check if transition closure was guarded for 1 or more domain specific reason
                 if (result instanceof Guard) {
-                    log.warning "FSM $parent: guarded transition for ${it.fromState} >> ${it.toState} becuase ${result.reason}"
+                    log.info "FSM $parent: guarded transition for ${it.fromState} >> ${it.toState} becuase ${result.reason}"
                 }
                 // transition closure executed properly so change the finite state
                 else {
+
                     this.previousState = this.currentState
                     this.currentState = it.toState
+
+                    log.debug "fsm setPreviousState: ${this.previousState}"
+                    log.debug "fsm setCurrentState: ${this.currentState}"
                 }
 
             }

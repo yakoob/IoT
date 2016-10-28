@@ -23,7 +23,6 @@ class MqttSerializerService {
             return
         }
 
-
         if (topic.contains("Aurduino/HomeAutomation.Audio/102/event")){
             def JsonObject = JSON.parse(message)
             def res = SoundDetected.newInstance()
@@ -31,7 +30,7 @@ class MqttSerializerService {
             return res
         }
 
-        else if (topic.contains("ActorSystem/Halloween/Projector")){
+        if (topic.contains("ActorSystem/Halloween/Projector")){
 
             def json = JSON.parse(message)
             Gson gson = new Gson()
@@ -43,10 +42,7 @@ class MqttSerializerService {
             if (json.event == "playbackStarted"){
                 return new MediaPlaybackStarted(media:new Gson().fromJson(message, Video.class))
             }
-
         }
-
-
-
     }
+
 }

@@ -48,7 +48,7 @@ class Smoke extends BaseActor implements FSM {
                     smokeCoolOffTimer = null
                     log.info "smoke machine ready"
                 }
-            }, context.system().dispatcher());
+            }, context.system().dispatcher())
     }
 
 }

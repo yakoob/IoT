@@ -1,70 +1,45 @@
-#include <PubSubClient.h>
-
 #include <Bridge.h>
 #include <YunServer.h>
 #include <YunClient.h>
 #include <Servo.h>
 
 YunServer server;
+YunClient net;
 Servo smoke;
 
-YunClient net;
-IPAddress mqttServerAddress(192, 168, 20, 114);
-
-PubSubClient mqttClient(net);
-
-long lastReconnectAttempt = 0;
-long lastAudioSensorPublish = 0;
-
-boolean reconnect() {
-  if (mqttClient.connect("arduinoClient161")) {
-    mqttClient.publish("arduionoClient_reconnected","OK");
-  }
-  return mqttClient.connected();
-}
-
 void setup() {
-
-  smoke.attach(5);
-  Bridge.begin();
-
-  server.listenOnLocalhost();
-  server.begin();
-
+  
   Serial.begin(9600);
-
-  mqttClient.setServer(mqttServerAddress,1883);
-  mqttClient.connect("arduinoClient_161");
-
+  
+  Bridge.begin();
+  
+  smoke.attach(5);
+  
+  server.listenOnLocalhost();
+  
+  server.begin();
+  
 }
 
 void loop() {
 
-  if (!mqttClient.connected()) {
-    long now = millis();
-    if (now - lastReconnectAttempt > 5000) {
-      lastReconnectAttempt = now;
-      // Attempt to reconnect
-      if (reconnect()) {
-        lastReconnectAttempt = 0;
-      }
-    }
-  } else {
-    mqttClient.loop();
-  }
-
   YunClient client = server.accept();
-
+  
   if (client) {
     process(client);
     client.stop();
   }
+
+  delay(50); // Poll every 50ms  
 
 }
 
 void process(YunClient client) {
 
   String command = client.readStringUntil('/');
+
+  client.println(command);  
+
 
   // Check if the url contains the word "servo"
   if (command == "servo") {
@@ -81,11 +56,19 @@ void servoCommand(YunClient client) {
   // Get the servo Pin
   pin = client.parseInt();
 
+  client.println(pin);
+  
   // Check if the url string contains a value (/servo/6/VALUE)
   if (client.read() == '/') {
-
+    
     value = client.parseInt();
 
+    client.println(value);
+    
+    smoke.write(value);
+    
+    
+    /*
     // smoke
     if (pin == 5) {
       smoke.write(value);
@@ -95,6 +78,7 @@ void servoCommand(YunClient client) {
         mqttClient.publish("Aurduino/HomeAutomation.Servo/101/event","{'Value':'0'}");
       }
     }
+    */
 
   }
 

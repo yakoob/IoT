@@ -146,6 +146,11 @@ class Light extends BaseActor implements FSM {
                 res << colorList.find{it.description==Color.Name.ORANGE}
             }
 
+            if (self.path().name().contains("lightPumpkinSinging")) {
+                res << colorList.find{it.description==Color.Name.PURPLE}
+            }
+
+
         } else if (brightnessCatagory == BrightnessCatagory.FULL && fsm.currentState == On.name) {
 
             res << colorList.find{it.description==Color.Name.PURPLE}

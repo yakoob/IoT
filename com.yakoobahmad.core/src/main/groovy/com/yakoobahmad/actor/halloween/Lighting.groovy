@@ -12,6 +12,7 @@ class Lighting extends BaseActor {
 
     ActorRef lightPumpkinLeft
     ActorRef lightPumpkinRight
+    ActorRef lightPumpkinSinging
 
     Lighting(){
 
@@ -19,7 +20,7 @@ class Lighting extends BaseActor {
 
             lightPumpkinLeft = context.system().actorOf(Props.create(Light.class, Hue.findByNode("5")), "lightPumpkinLeft")
             lightPumpkinRight = context.system().actorOf(Props.create(Light.class, Hue.findByNode("6")), "lightPumpkinRight")
-
+            lightPumpkinSinging = context.system().actorOf(Props.create(Light.class, Hue.findByNode("7")), "lightPumpkinSinging")
         }
 
     }
@@ -38,6 +39,7 @@ class Lighting extends BaseActor {
 
             lightPumpkinLeft.tell(message, self)
             lightPumpkinRight.tell(message, self)
+            lightPumpkinSinging.tell(message, self)
 
         }
 

@@ -46,6 +46,7 @@ class BootStrap {
         new Hue(node: 4, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
         new Hue(node: 5, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
         new Hue(node: 6, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
+        new Hue(node: 7, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
 
     }
 }

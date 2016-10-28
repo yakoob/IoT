@@ -11,33 +11,45 @@ class HttpClientService {
 
     AsyncHTTPBuilder http = new AsyncHTTPBuilder(poolSize : 1)
 
-    def execute(String url, String path) {
+    def get(String url) {
 
-
-        def uri = "$url/${path.toString()}"
-        http.uri = uri
-
-        http.get(path:uri)
-
-        // println uri
+        try {
+            def uri = "$url"
+            http.uri = uri
+            http.get(path:uri)
+        } catch (e){
+            e.printStackTrace()
+        }
 
     }
 
     def put(String url, HueEffect hueEffect) {
 
-        RestBuilder rest = new RestBuilder()
-        task {
-            def resp = rest.put(url){
-                contentType "application/json"
-                json {
-                    on = hueEffect.on
-                    bri = hueEffect.bri
-                    sat = hueEffect.sat
-                    hue = hueEffect.hue
-                    effect = "hueEffect"
+        try {
+            RestBuilder rest = new RestBuilder()
+            task {
+                def resp = rest.put(url){
+                    contentType "application/json"
+                    json {
+                        on = hueEffect.on
+                        bri = hueEffect.bri
+                        sat = hueEffect.sat
+                        hue = hueEffect.hue
+                        effect = "hueEffect"
+                    }
                 }
             }
+        } catch (e) {
+            e.printStackTrace()
         }
+
+    }
+
+    def execute(String url, String path) {
+        def uri = "$url/${path.toString()}"
+        http.uri = uri
+        http.get(path:uri)
+        // println uri
     }
 
 }
