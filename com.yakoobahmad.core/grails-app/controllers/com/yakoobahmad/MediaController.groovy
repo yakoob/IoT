@@ -2,7 +2,8 @@ package com.yakoobahmad
 
 import akka.actor.ActorRef
 import com.yakoobahmad.command.video.Play
-import com.yakoobahmad.media.Video
+import com.yakoobahmad.media.HalloweenVideo
+import com.yakoobahmad.media.ChristmasVideo
 
 class MediaController {
 
@@ -13,6 +14,7 @@ class MediaController {
         String t = params.media
         t = t?.toUpperCase()
 
+        /*
         if (t == "GGG") {
             akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.GRIM_GRINNING_GHOST)), ActorRef.noSender())
         } else if (t == "WT"){
@@ -28,7 +30,7 @@ class MediaController {
         } else if (t == "WOODS"){
             akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.WOODS)), ActorRef.noSender())
         }
-
+        */
         render t?:"media not found"
         return
     }

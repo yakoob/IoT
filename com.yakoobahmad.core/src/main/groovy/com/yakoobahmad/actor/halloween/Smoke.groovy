@@ -56,7 +56,7 @@ class Smoke extends com.yakoobahmad.actor.device.Smoke {
             /**
              * turn smoke off after 2 secons
              */
-            context.system().scheduler().scheduleOnce(Duration.create(2, TimeUnit.SECONDS),
+            context.system().scheduler().scheduleOnce(Duration.create(3, TimeUnit.SECONDS),
                 new Runnable() {
                     @Override
                     public void run() {
@@ -77,7 +77,7 @@ class Smoke extends com.yakoobahmad.actor.device.Smoke {
             if (state instanceof On)
                 httpClientService.get("http://192.168.20.217/arduino/servo/5/60")
             if (state instanceof Off)
-                httpClientService.get("http://192.168.20.217/arduino/servo/5/95")
+                httpClientService.get("http://192.168.20.217/arduino/servo/5/90")
 
             /*
             def smoke = com.yakoobahmad.device.Smoke.findByNameAndState(

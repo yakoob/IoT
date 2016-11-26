@@ -1,7 +1,7 @@
-import com.yakoobahmad.media.HalloweenVideo
+import com.yakoobahmad.media.ChristmasVideo
 
 model {
-    HalloweenVideo obj
+    ChristmasVideo obj
 }
 
 json {

@@ -5,7 +5,8 @@ import com.yakoobahmad.event.MediaPlaybackComplete
 import com.yakoobahmad.event.MediaPlaybackStarted
 import com.yakoobahmad.event.MotionDetected
 import com.yakoobahmad.event.SoundDetected
-import com.yakoobahmad.media.Video
+import com.yakoobahmad.media.ChristmasVideo
+import com.yakoobahmad.media.HalloweenVideo
 import grails.converters.JSON
 import grails.transaction.Transactional
 
@@ -40,7 +41,21 @@ class MqttSerializerService {
             }
 
             if (json.event == "playbackStarted"){
-                return new MediaPlaybackStarted(media:new Gson().fromJson(message, Video.class))
+                return new MediaPlaybackStarted(media:new Gson().fromJson(message, HalloweenVideo.class))
+            }
+        }
+
+        if (topic.contains("ActorSystem/Christmas/Projector")){
+
+            def json = JSON.parse(message)
+            Gson gson = new Gson()
+
+            if (json.command == "songComplete"){
+                return new MediaPlaybackComplete()
+            }
+
+            if (json.event == "playbackStarted"){
+                return new MediaPlaybackStarted(media:new Gson().fromJson(message, ChristmasVideo.class))
             }
         }
     }

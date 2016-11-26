@@ -1,14 +1,13 @@
-package com.yakoobahmad.halloween
+package com.yakoobahmad.media
 
-import com.yakoobahmad.media.halloween.Video
 import grails.test.mixin.TestFor
 import spock.lang.Specification
 
 /**
  * See the API for {@link grails.test.mixin.domain.DomainClassUnitTestMixin} for usage instructions
  */
-@TestFor(Video)
-class VideoSpec extends Specification {
+@TestFor(HalloweenVideo)
+class HalloweenVideoSpec extends Specification {
 
     def setup() {
     }

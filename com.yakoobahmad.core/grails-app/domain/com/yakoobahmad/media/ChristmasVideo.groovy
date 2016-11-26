@@ -1,17 +1,16 @@
 package com.yakoobahmad.media
 
-import com.yakoobahmad.domain.media.Media
-import com.yakoobahmad.domain.utils.DomainSerializable
+class ChristmasVideo extends com.yakoobahmad.media.Video {
 
-class Video implements DomainSerializable, Media {
+    enum Name {DECK_THE_HALLS, GREAT_GIFT_WRAP, MARCH_WOODEN_SOLDIER, PACKING_SANTA_SLEIGH, TOY_TINKERING, NBC1, NBC2}
 
-    def name
+    Name name
     String command
     String event
 
     @Override
     public String getJsonTemplatePath(){
-        return "this path should not be called"
+        return "/christmas/_video"
     }
 
     @Override
@@ -24,5 +23,3 @@ class Video implements DomainSerializable, Media {
         event nullable: true
     }
 }
-
-

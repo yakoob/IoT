@@ -4,7 +4,7 @@ import akka.actor.ActorRef
 import akka.actor.Cancellable
 import com.yakoobahmad.actor.BaseActor
 import com.yakoobahmad.command.video.Play
-import com.yakoobahmad.media.Video
+import com.yakoobahmad.media.HalloweenVideo
 import grails.util.Holders
 import groovy.transform.AutoClone
 import groovy.transform.ToString
@@ -50,18 +50,18 @@ class Twitter extends BaseActor {
                     text = text?.replaceAll(" ","")
                     text = text?.replaceAll("@KoobsPumpkins","")
 
-                    Video.withNewSession {
+                    HalloweenVideo.withNewSession {
 
                         if (text == "GGG"){
-                            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.GRIM_GRINNING_GHOST)), ActorRef.noSender())
+                            akkaService.halloweenManager.tell(new Play(media: HalloweenVideo.findByName(Video.Name.GRIM_GRINNING_GHOST)), ActorRef.noSender())
                         } else if (text == "WT"){
-                            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.WHATS_THIS)), ActorRef.noSender())
+                            akkaService.halloweenManager.tell(new Play(media: HalloweenVideo.findByName(Video.Name.WHATS_THIS)), ActorRef.noSender())
                         } else if (text == "OBP"){
-                            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.OOGIE_BOOGIE_PUMPKINS)), ActorRef.noSender())
+                            akkaService.halloweenManager.tell(new Play(media: HalloweenVideo.findByName(Video.Name.OOGIE_BOOGIE_PUMPKINS)), ActorRef.noSender())
                         } else if (text == "KSC"){
-                            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.KIDNAP_SANDY_CLAWS)), ActorRef.noSender())
+                            akkaService.halloweenManager.tell(new Play(media: HalloweenVideo.findByName(Video.Name.KIDNAP_SANDY_CLAWS)), ActorRef.noSender())
                         } else if (text == "TIH"){
-                            akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.THIS_IS_HALLOWEEN)), ActorRef.noSender())
+                            akkaService.halloweenManager.tell(new Play(media: HalloweenVideo.findByName(Video.Name.THIS_IS_HALLOWEEN)), ActorRef.noSender())
                         } else if (text == "MM"){
                             akkaService.halloweenManager.tell(new Play(media: Video.findByName(Video.Name.MONSTER_MASH)), ActorRef.noSender())
                         }

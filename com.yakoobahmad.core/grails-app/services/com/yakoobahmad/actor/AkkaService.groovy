@@ -9,6 +9,7 @@ import akka.cluster.ClusterEvent
 
 import com.typesafe.config.ConfigFactory
 import com.yakoobahmad.actor.networking.ClusterListener
+import com.yakoobahmad.config.GlobalConfig
 import com.yakoobahmad.device.Smoke
 import grails.gsp.PageRenderer
 import grails.transaction.Transactional
@@ -20,7 +21,7 @@ import javax.annotation.PreDestroy
 
 @Log
 @Transactional
-class AkkaService {
+class AkkaService implements GlobalConfig {
 
     private static ActorSystem system
     private static final ActorRef ACTOR_NO_SENDER = ActorRef.noSender()
@@ -36,8 +37,19 @@ class AkkaService {
     def serverService
 
     void init() {
+
+        log.info "Akka service running with app mode: christmas $christmasEnabled | halloween: $halloweenEnabled"
+
         // create actor system
-        system = ActorSystem.create("Halloween")
+        if (halloweenEnabled && christmasEnabled)
+            system = ActorSystem.create("HalloweenAndChristmas")
+        else if (halloweenEnabled)
+            system = ActorSystem.create("Halloween")
+        else if (christmasEnabled)
+            system = ActorSystem.create("Christmas")
+        else
+            system = ActorSystem.create("AppModeNotConfigured")
+
         log.info "Initialized Akka ActorSystem $system"
         actorSetup()
         def cluster = Cluster.get(system)
@@ -56,11 +68,18 @@ class AkkaService {
     }
 
     void actorSetup() {
+
         clusterListener = actorOf(ClusterListener, "ClusterListener")
-        halloweenManager = actorOf(com.yakoobahmad.actor.halloween.Manager, "HalloweenManager")
-        christmasManger = actorOf(com.yakoobahmad.actor.christmas.Manager, "ChristmasManger")
-        soundDetection = actorOf(com.yakoobahmad.actor.device.SoundDetection, "SoundDetection")
-        twitter = actorOf(com.yakoobahmad.actor.social.Twitter, "Twitter")
+
+        if (christmasEnabled){
+            christmasManger = actorOf(com.yakoobahmad.actor.christmas.Manager, "ChristmasManger")
+        }
+
+        if (halloweenEnabled){
+            halloweenManager = actorOf(com.yakoobahmad.actor.halloween.Manager, "HalloweenManager")
+            soundDetection = actorOf(com.yakoobahmad.actor.device.SoundDetection, "SoundDetection")
+            twitter = actorOf(com.yakoobahmad.actor.social.Twitter, "Twitter")
+        }
     }
 
     ActorRef actorNoSender() {

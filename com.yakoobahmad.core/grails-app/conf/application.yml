@@ -156,6 +156,11 @@ automation:
         smoke:
             host: 127.0.0.1
             status: false
+---
+app:
+    mode:
+        christmas: false
+        halloween: false
 
 ---
 twitter:

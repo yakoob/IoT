@@ -1,17 +1,16 @@
 package com.yakoobahmad.media
 
-import com.yakoobahmad.domain.media.Media
-import com.yakoobahmad.domain.utils.DomainSerializable
+class HalloweenVideo extends com.yakoobahmad.media.Video {
 
-class Video implements DomainSerializable, Media {
+    enum Name {WOODS,GRIM_GRINNING_GHOST,KIDNAP_SANDY_CLAWS,MONSTER_MASH,THIS_IS_HALLOWEEN,WHATS_THIS,OOGIE_BOOGIE_PUMPKINS}
 
-    def name
+    Name name
     String command
     String event
 
     @Override
     public String getJsonTemplatePath(){
-        return "this path should not be called"
+        return "/halloween/_video"
     }
 
     @Override
@@ -24,5 +23,3 @@ class Video implements DomainSerializable, Media {
         event nullable: true
     }
 }
-
-

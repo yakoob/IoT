@@ -1,4 +1,4 @@
-package com.yakoobahmad.actor.halloween
+package com.yakoobahmad.actor.christmas
 
 import akka.actor.ActorRef
 import akka.actor.Cancellable
@@ -17,8 +17,7 @@ import com.yakoobahmad.fsm.state.Any
 import com.yakoobahmad.fsm.state.Off
 import com.yakoobahmad.fsm.state.video.Paused
 import com.yakoobahmad.fsm.state.video.Playing
-import com.yakoobahmad.media.HalloweenVideo
-import com.yakoobahmad.media.Video
+import com.yakoobahmad.media.ChristmasVideo
 import grails.util.Holders
 import groovy.util.logging.Slf4j
 import scala.concurrent.duration.Duration
@@ -30,29 +29,25 @@ class Projector extends BaseActor implements FSM {
 
     def jsonService = Holders.applicationContext.getBean("jsonService")
     def mqttClientService = Holders.applicationContext.getBean("mqttClientService")
-    def twitterService = Holders.applicationContext.getBean("twitterService")
 
-    HalloweenVideo currentVideo
-    HalloweenVideo previousVideo
-
-    HalloweenVideo woods
+    ChristmasVideo currentVideo
+    ChristmasVideo previousVideo
+    ChristmasVideo idleVideo
 
     Cancellable randomVideoTimer
-    Cancellable twitterMentionsTimer
+
 
     Projector(){
 
-        HalloweenVideo.withNewSession {
-            def w = HalloweenVideo.findByName(HalloweenVideo.Name.WOODS)
+        ChristmasVideo.withNewSession {
+            def w = ChristmasVideo.findByName(ChristmasVideo.Name.TOY_TINKERING)
             currentVideo = w
-            woods = w
+            idleVideo = w
         }
 
         startStateMachine(Off)
 
         configureFsmDsl()
-
-        startTwitterMentionsTimer()
 
         startRandomVideoTimer()
 
@@ -72,14 +67,14 @@ class Projector extends BaseActor implements FSM {
 
         } else if (message instanceof MediaPlaybackComplete) {
 
-            self.tell(new Play(media: woods), ActorRef.noSender())
+            self.tell(new Play(media: idleVideo), ActorRef.noSender())
 
         } else if (message instanceof MediaPlaybackStarted) {
-            if (message.media instanceof Video) {
+            if (message.media instanceof ChristmasVideo) {
                 this.currentVideo = message.media
             }
         } else if (message instanceof MotionDetected){
-            if (currentVideoIsWoods()){
+            if (currentVideoIsIdle()){
                 randomVideoTimer?.cancel()
                 startRandomVideoTimer()
             }
@@ -114,7 +109,7 @@ class Projector extends BaseActor implements FSM {
 
         if (command instanceof CommandableMedia) {
 
-            if ( !currentVideoIsWoods() )
+            if ( !currentVideoIsIdle() )
                 this.previousVideo = this.currentVideo
 
             this.currentVideo = command?.media
@@ -122,7 +117,7 @@ class Projector extends BaseActor implements FSM {
             if (currentVideo?.jsonTemplatePath) {
                 // send to mqtt so android can process
                 mqttClientService.publish(
-                        "halloween/video",
+                        "christmas/video",
                         jsonService.toJsonFromDomainTemplate(currentVideo)
                 )
             }
@@ -141,21 +136,23 @@ class Projector extends BaseActor implements FSM {
 
                             log.debug "playing random video"
 
-                            Video.withNewSession {
+                            ChristmasVideo.withNewSession {
 
-                                def videos = HalloweenVideo.findAll()
+                                def videos = ChristmasVideo.findAll()
+
+                                log.info "christmas videos: " + videos.toListString()
 
                                 if(videos?.size()){
 
-                                    videos.removeAll([woods,previousVideo])
+                                    videos.removeAll([idleVideo,previousVideo])
 
                                     Collections.shuffle(videos)
 
-                                    Video selectedVideo = videos?.first()
+                                    ChristmasVideo selectedVideo = videos?.first()
 
                                     log.debug "selectedVideo is ${selectedVideo.name}"
 
-                                    if ( currentVideoIsWoods() ){
+                                    if ( currentVideoIsIdle() ){
                                         self.tell(new Play(media: selectedVideo), ActorRef.noSender())
                                     } else {
                                         log.warn "can not play random video because currentVideo is not WOODS"
@@ -175,39 +172,8 @@ class Projector extends BaseActor implements FSM {
 
     }
 
-
-
-    private void startTwitterMentionsTimer(){
-
-        twitterMentionsTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.SECONDS),
-            new Runnable() {
-                @Override
-                public void run() {
-
-                    if (!twitterService.enabled)
-                        return
-
-                    log.debug "tell twitter actor to try next"
-
-                    log.debug "current media: ${currentVideo.name}"
-
-                    if (currentVideoIsWoods()){
-
-                        akkaService.twitter.tell("NEXT", self)
-
-                    } else {
-                        log.debug "media in progress try again"
-                    }
-
-
-                }
-            }, context.system().dispatcher())
-
-
-    }
-
-    boolean currentVideoIsWoods(){
-        return currentVideo?.name == HalloweenVideo.Name.WOODS
+    boolean currentVideoIsIdle(){
+        return currentVideo?.name == ChristmasVideo.Name.TOY_TINKERING
     }
 }
 
