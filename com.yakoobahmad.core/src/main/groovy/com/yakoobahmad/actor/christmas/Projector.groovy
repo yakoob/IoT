@@ -144,7 +144,7 @@ class Projector extends BaseActor implements FSM {
 
                                 if(videos?.size()){
 
-                                    videos.removeAll([idleVideo,previousVideo])
+                                    videos.removeAll([previousVideo])
 
                                     Collections.shuffle(videos)
 
@@ -173,7 +173,7 @@ class Projector extends BaseActor implements FSM {
     }
 
     boolean currentVideoIsIdle(){
-        return currentVideo?.name == ChristmasVideo.Name.TOY_TINKERING
+        return true
     }
 }
 

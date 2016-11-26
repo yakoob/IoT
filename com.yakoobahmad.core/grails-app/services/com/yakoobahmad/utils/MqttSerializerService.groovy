@@ -58,6 +58,12 @@ class MqttSerializerService {
                 return new MediaPlaybackStarted(media:new Gson().fromJson(message, ChristmasVideo.class))
             }
         }
+
+        if (topic.contains("ActorSystem/Christmas/Projector/Event")){
+            println "!!! todo: !!!! implement christmas projector events"
+            println message
+            return
+        }
     }
 
 }

@@ -55,8 +55,6 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
     MediaPlayer mediaPlayer = null;
 
-    AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-
     private static Context mContext;
 
     public static ViewVideo instace;
@@ -155,6 +153,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
             video = new Gson().fromJson(message.toString(), Video.class);
 
+            Log.d("ChristmasProjector", message.toString());
             Log.d("ChristmasProjector", "command:" + video.getCommand() + " | song:" + video.getName());
 
             if (video.getCommand().equals("Play")) {
@@ -190,6 +189,9 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+
+                        // final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+
                         vv.resume();
                         Handler handler = new Handler();
                         handler.postDelayed(new Runnable() {
@@ -226,8 +228,9 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                                         }
                                         */
 
-
-                                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                                        // audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                                        AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                                        audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
 
                                         try {
 
@@ -308,10 +311,12 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
             } else if (video.getCommand().equals("UnMute")) {
 
+                AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
 
             } else if (video.getCommand().equals("Mute")){
 
+                AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
                 audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
 
             } else {
@@ -447,7 +452,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
     private void play() throws MqttException {
         MqttMessage m = new MqttMessage();
-        String video = "{'command':'Play','name':'deck_the_halls'}";
+        String video = "{'command':'Play','name':'DECK_THE_HALLS'}";
         m.setPayload(video.getBytes());
         client.publish("christmas/video", m);
     }
