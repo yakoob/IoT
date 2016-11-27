@@ -4,7 +4,6 @@ import com.yakoobahmad.device.Smoke
 import com.yakoobahmad.media.ChristmasVideo
 import com.yakoobahmad.media.HalloweenVideo
 import com.yakoobahmad.halloween.light.Hue
-import com.yakoobahmad.media.Video
 import com.yakoobahmad.visualization.Color
 import com.yakoobahmad.visualization.ColorHue
 
@@ -35,6 +34,7 @@ class BootStrap implements GlobalConfig {
     }
 
     private void configureDataHalloween(){
+            /*
             new Smoke(name: Smoke.Name.HALLOWEEN_REAR, position: 20, state: Smoke.State.OFF).save(failOnError:true, flush:true)
             new Smoke(name: Smoke.Name.HALLOWEEN_REAR, position: 60, state: Smoke.State.ON).save(failOnError:true, flush:true)
 
@@ -62,7 +62,7 @@ class BootStrap implements GlobalConfig {
             new Hue(node: 5, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
             new Hue(node: 6, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
             new Hue(node: 7, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-
+            */
     }
 
     private void configureDataChristmas(){
@@ -70,8 +70,6 @@ class BootStrap implements GlobalConfig {
             new ChristmasVideo(name: ChristmasVideo.Name.DECK_THE_HALLS).save(failOnError:true, flush:true)
             new ChristmasVideo(name: ChristmasVideo.Name.GREAT_GIFT_WRAP).save(failOnError:true, flush:true)
             new ChristmasVideo(name: ChristmasVideo.Name.MARCH_WOODEN_SOLDIER).save(failOnError:true, flush:true)
-            new ChristmasVideo(name: ChristmasVideo.Name.NBC1).save(failOnError:true, flush:true)
-            new ChristmasVideo(name: ChristmasVideo.Name.NBC2).save(failOnError:true, flush:true)
             new ChristmasVideo(name: ChristmasVideo.Name.PACKING_SANTA_SLEIGH).save(failOnError:true, flush:true)
             new ChristmasVideo(name: ChristmasVideo.Name.TOY_TINKERING).save(failOnError:true, flush:true)
 

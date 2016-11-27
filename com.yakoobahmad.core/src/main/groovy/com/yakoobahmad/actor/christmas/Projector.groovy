@@ -39,12 +39,6 @@ class Projector extends BaseActor implements FSM {
 
     Projector(){
 
-        ChristmasVideo.withNewSession {
-            def w = ChristmasVideo.findByName(ChristmasVideo.Name.TOY_TINKERING)
-            currentVideo = w
-            idleVideo = w
-        }
-
         startStateMachine(Off)
 
         configureFsmDsl()
@@ -125,7 +119,7 @@ class Projector extends BaseActor implements FSM {
 
     private void startRandomVideoTimer(){
 
-        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.MINUTES),
+        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(3, TimeUnit.MINUTES),
                 new Runnable() {
                     @Override
                     public void run() {
@@ -138,7 +132,7 @@ class Projector extends BaseActor implements FSM {
 
                                 def videos = ChristmasVideo.findAll()
 
-                                log.info "christmas videos: " + videos.toListString()
+                                // log.info "christmas videos: " + videos.toListString()
 
                                 if(videos?.size()){
 
@@ -148,7 +142,7 @@ class Projector extends BaseActor implements FSM {
 
                                     ChristmasVideo selectedVideo = videos?.first()
 
-                                    log.debug "selectedVideo is ${selectedVideo.name}"
+                                    log.debug "TELL PROJECTOR TO PLAY NEW VIDEO: ${selectedVideo.name}"
 
                                     self.tell(new Play(media: selectedVideo), ActorRef.noSender())
 

@@ -27,6 +27,7 @@ class AkkaService implements GlobalConfig {
     private static final ActorRef ACTOR_NO_SENDER = ActorRef.noSender()
 
     ActorRef clusterListener
+    ActorRef homeManager
     ActorRef halloweenManager
     ActorRef christmasManger
     ActorRef soundDetection
@@ -70,6 +71,8 @@ class AkkaService implements GlobalConfig {
     void actorSetup() {
 
         clusterListener = actorOf(ClusterListener, "ClusterListener")
+
+        homeManager = actorOf(com.yakoobahmad.actor.HomeManager, "HomeManger")
 
         if (christmasEnabled){
             christmasManger = actorOf(com.yakoobahmad.actor.christmas.Manager, "ChristmasManger")

@@ -1,6 +1,9 @@
 package com.yakoobahmad.media
 
-class HalloweenVideo extends com.yakoobahmad.media.Video {
+import com.yakoobahmad.domain.media.Media
+import com.yakoobahmad.domain.utils.DomainSerializable
+
+class HalloweenVideo implements DomainSerializable, Media {
 
     enum Name {WOODS,GRIM_GRINNING_GHOST,KIDNAP_SANDY_CLAWS,MONSTER_MASH,THIS_IS_HALLOWEEN,WHATS_THIS,OOGIE_BOOGIE_PUMPKINS}
 
@@ -19,6 +22,7 @@ class HalloweenVideo extends com.yakoobahmad.media.Video {
     }
 
     static constraints = {
+        name nullable: true
         command nullable: true
         event nullable: true
     }

@@ -1,6 +1,9 @@
 package com.yakoobahmad.media
 
-class ChristmasVideo extends com.yakoobahmad.media.Video {
+import com.yakoobahmad.domain.media.Media
+import com.yakoobahmad.domain.utils.DomainSerializable
+
+class ChristmasVideo implements DomainSerializable, Media {
 
     enum Name {DECK_THE_HALLS, GREAT_GIFT_WRAP, MARCH_WOODEN_SOLDIER, PACKING_SANTA_SLEIGH, TOY_TINKERING}
 
@@ -19,6 +22,7 @@ class ChristmasVideo extends com.yakoobahmad.media.Video {
     }
 
     static constraints = {
+        name nullable: true
         command nullable: true
         event nullable: true
     }

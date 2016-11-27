@@ -4,7 +4,6 @@ import akka.actor.ActorRef
 import com.yakoobahmad.command.video.Play
 import com.yakoobahmad.media.HalloweenVideo
 import com.yakoobahmad.media.ChristmasVideo
-import com.yakoobahmad.media.Video
 
 class MediaController {
 

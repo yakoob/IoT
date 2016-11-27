@@ -18,7 +18,6 @@ import com.yakoobahmad.fsm.state.Off
 import com.yakoobahmad.fsm.state.video.Paused
 import com.yakoobahmad.fsm.state.video.Playing
 import com.yakoobahmad.media.HalloweenVideo
-import com.yakoobahmad.media.Video
 import grails.util.Holders
 import groovy.util.logging.Slf4j
 import scala.concurrent.duration.Duration
@@ -75,7 +74,7 @@ class Projector extends BaseActor implements FSM {
             self.tell(new Play(media: woods), ActorRef.noSender())
 
         } else if (message instanceof MediaPlaybackStarted) {
-            if (message.media instanceof Video) {
+            if (message.media instanceof HalloweenVideo) {
                 this.currentVideo = message.media
             }
         } else if (message instanceof MotionDetected){
@@ -141,7 +140,7 @@ class Projector extends BaseActor implements FSM {
 
                             log.debug "playing random video"
 
-                            Video.withNewSession {
+                            HalloweenVideo.withNewSession {
 
                                 def videos = HalloweenVideo.findAll()
 
@@ -151,7 +150,7 @@ class Projector extends BaseActor implements FSM {
 
                                     Collections.shuffle(videos)
 
-                                    Video selectedVideo = videos?.first()
+                                    HalloweenVideo selectedVideo = videos?.first()
 
                                     log.debug "selectedVideo is ${selectedVideo.name}"
 

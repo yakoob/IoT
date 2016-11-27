@@ -1,5 +1,6 @@
 package com.yakoobahmad.networking
 
+import com.yakoobahmad.config.GlobalConfig
 import com.yakoobahmad.event.MediaPlaybackComplete
 import com.yakoobahmad.event.MediaPlaybackStarted
 import com.yakoobahmad.event.MotionDetected
@@ -35,6 +36,7 @@ class MqttClientService implements MqttCallback {
             mqttClient = new MqttClient("tcp://${ip}:${port}", "${serverService.thisServer.name}", mqttPersistence)
             mqttClient.connect()
             mqttClient.setCallback(this)
+            mqttClient.setTimeToWait(3000)
             mqttClient.subscribe("#") // subscript to all topics
             log.info "mqtt client connected"
         }
@@ -45,8 +47,14 @@ class MqttClientService implements MqttCallback {
     }
 
     @Override
-    public void connectionLost(Throwable cause) {
-        log.error "connectionLost: ${cause.message} ${cause.stackTrace}"
+    public void connectionLost(Throwable me) {
+
+        log.warn("msg "+me?.getMessage())
+        log.warn("loc "+me?.getLocalizedMessage())
+        log.warn("cause "+me?.getCause())
+        log.warn("excep "+me?.toString())
+        me?.printStackTrace()
+
         sleep(5000)
         mqttClient = null
         init()
@@ -58,19 +66,26 @@ class MqttClientService implements MqttCallback {
 
             def message = mqttSerializerService.serialize(topic, m?.toString())
 
-            if (message instanceof SoundDetected)
-                akkaService.soundDetection.tell(message, akkaService.actorNoSender())
-            else if (message instanceof MediaPlaybackComplete)
-                akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
-            else if (message instanceof MediaPlaybackStarted)
-                akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
-            else if (message instanceof MotionDetected)
-                akkaService.halloweenManager.tell(message, akkaService.actorNoSender())
+            if (message instanceof SoundDetected) {
+
+                akkaService.soundDetection?.tell(message, akkaService.actorNoSender())
+
+            } else if (message instanceof MediaPlaybackComplete) {
+                akkaService.homeManager?.tell(message, akkaService.actorNoSender())
+            }
+
+            else if (message instanceof MediaPlaybackStarted ) {
+                akkaService.homeManager?.tell(message, akkaService.actorNoSender())
+            }
+
+            else if (message instanceof MotionDetected ){
+                akkaService.homeManager?.tell(message, akkaService.actorNoSender())
+            }
 
             log.debug "mqtt messageArrived >> topic:$topic | ${m.toString()}"
 
         } catch (e) {
-            log.error e.stackTrace
+            println e?.printStackTrace()
         }
     }
 
