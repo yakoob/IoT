@@ -127,7 +127,7 @@ class Projector extends BaseActor implements FSM {
 
     private void startRandomVideoTimer(){
 
-        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.MINUTES),
+        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(2, TimeUnit.MINUTES),
                 new Runnable() {
                     @Override
                     public void run() {

@@ -170,14 +170,6 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                     vid = R.raw.march_wooden_soldier;
                     sub = R.raw.march_wooden_soldier_sub;
                 }
-                else if (video.getName().equals(Video.Name.NBC1)) {
-                    vid = R.raw.nbc1;
-                    sub = R.raw.nbc1_sub;
-                }
-                else if (video.getName().equals(Video.Name.NBC2)) {
-                    vid = R.raw.nbc2;
-                    sub = R.raw.nbc2_sub;
-                }
                 else if (video.getName().equals(Video.Name.PACKING_SANTA_SLEIGH)) {
                     vid = R.raw.packing_santa_sleigh;
                     sub = R.raw.packing_santa_sleigh_sub;
@@ -204,33 +196,16 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                                 vv.setOnPreparedListener( new MediaPlayer.OnPreparedListener() {
                                     @Override
                                     public void onPrepared(MediaPlayer pMp) {
+
                                         mediaPlayer = pMp;
 
                                         setMediaTextCallBack(sub);
 
-                                        /*
-                                        if (video.getName().equals(Video.Name.WOODS)) {
-
-                                            mediaPlayer.setLooping(true);
-
-                                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-
-                                        } else {
-
-                                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-
-                                            mediaPlayer.setLooping(false);
-                                        }
-                                        */
-
                                         // audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                                        // audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
                                         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
                                         audioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+                                        mediaPlayer.setLooping(true);
 
                                         try {
 

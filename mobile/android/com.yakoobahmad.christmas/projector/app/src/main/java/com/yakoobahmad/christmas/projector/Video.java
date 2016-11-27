@@ -2,7 +2,7 @@ package com.yakoobahmad.christmas.projector;
 
 class Video {
 
-    enum Name {DECK_THE_HALLS, GREAT_GIFT_WRAP, MARCH_WOODEN_SOLDIER, PACKING_SANTA_SLEIGH, TOY_TINKERING, NBC1, NBC2}
+    enum Name {DECK_THE_HALLS, GREAT_GIFT_WRAP, MARCH_WOODEN_SOLDIER, PACKING_SANTA_SLEIGH, TOY_TINKERING}
 
     private Name name;
     private String command;
