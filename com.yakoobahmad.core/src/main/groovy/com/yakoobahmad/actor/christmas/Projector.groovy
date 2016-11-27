@@ -74,10 +74,10 @@ class Projector extends BaseActor implements FSM {
                 this.currentVideo = message.media
             }
         } else if (message instanceof MotionDetected){
-            if (currentVideoIsIdle()){
-                randomVideoTimer?.cancel()
-                startRandomVideoTimer()
-            }
+
+            randomVideoTimer?.cancel()
+            startRandomVideoTimer()
+
         }
 
     }
@@ -109,9 +109,7 @@ class Projector extends BaseActor implements FSM {
 
         if (command instanceof CommandableMedia) {
 
-            if ( !currentVideoIsIdle() )
-                this.previousVideo = this.currentVideo
-
+            this.previousVideo = this.currentVideo
             this.currentVideo = command?.media
 
             if (currentVideo?.jsonTemplatePath) {
@@ -127,7 +125,7 @@ class Projector extends BaseActor implements FSM {
 
     private void startRandomVideoTimer(){
 
-        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(2, TimeUnit.MINUTES),
+        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.MINUTES),
                 new Runnable() {
                     @Override
                     public void run() {
@@ -152,11 +150,7 @@ class Projector extends BaseActor implements FSM {
 
                                     log.debug "selectedVideo is ${selectedVideo.name}"
 
-                                    if ( currentVideoIsIdle() ){
-                                        self.tell(new Play(media: selectedVideo), ActorRef.noSender())
-                                    } else {
-                                        log.warn "can not play random video because currentVideo is not WOODS"
-                                    }
+                                    self.tell(new Play(media: selectedVideo), ActorRef.noSender())
 
                                 } else {
                                     log.warn "no videos found!!!"
@@ -172,8 +166,5 @@ class Projector extends BaseActor implements FSM {
 
     }
 
-    boolean currentVideoIsIdle(){
-        return true
-    }
 }
 
