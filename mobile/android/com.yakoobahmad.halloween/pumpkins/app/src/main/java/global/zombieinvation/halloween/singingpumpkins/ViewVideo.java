@@ -183,6 +183,32 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                 } else if (video.getName().equals(Video.Name.OOGIE_BOOGIE_PUMPKINS)) {
                     vid = R.raw.halloween_obp;
                     sub = R.raw.halloween_obp_sub;
+                } else if (video.getName().equals(Video.Name.TIMEWARP)) {
+                    vid = R.raw.halloween_timewarp;
+                    sub = R.raw.halloween_timewarp_sub;
+                } else if (video.getName().equals(Video.Name.SAM_NOCOSTUME)) {
+                    vid = R.raw.halloween_sam_nocostume;
+                    sub = R.raw.halloween_sam_nocostume_sub;
+                }
+                else if (video.getName().equals(Video.Name.SAM_SYMPHONY)) {
+                    vid = R.raw.halloween_sam_symphony;
+                    sub = R.raw.halloween_sam_symphony_sub;
+                }
+                else if (video.getName().equals(Video.Name.SAM_SCARE1)) {
+                    vid = R.raw.halloween_sam_scare1;
+                    sub = R.raw.halloween_sam_scare1_sub;
+                }
+                else if (video.getName().equals(Video.Name.SAM_SCARE2)) {
+                    vid = R.raw.halloween_sam_scare1;
+                    sub = R.raw.halloween_sam_scare1_sub;
+                }
+                else if (video.getName().equals(Video.Name.SAM_SCARE3)) {
+                    vid = R.raw.halloween_sam_scare3;
+                    sub = R.raw.halloween_sam_scare3_sub;
+                }
+                else if (video.getName().equals(Video.Name.SAM_SCARE4)) {
+                    vid = R.raw.halloween_sam_scare4;
+                    sub = R.raw.halloween_sam_scare4_sub;
                 }
 
                 handler.post(new Runnable() {
