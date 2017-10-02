@@ -1,0 +1,12 @@
+import com.yakoobahmad.media.HalloweenVideo
+
+model {
+    HalloweenVideo obj
+}
+
+json {
+    id obj.id
+    name obj.name
+    command obj.command
+}
+

@@ -41,6 +41,8 @@ class Projector extends BaseActor implements FSM {
 
     Projector(){
 
+        println "Projector initialized with : "+self?.path()?.name()
+
         HalloweenVideo.withNewSession {
             def w = HalloweenVideo.findByName(HalloweenVideo.Name.WOODS)
             currentVideo = w

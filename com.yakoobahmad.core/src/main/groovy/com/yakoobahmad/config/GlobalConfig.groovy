@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Value
 trait GlobalConfig {
 
     @Value('${app.mode.christmas}')
-    def christmasEnabled
+    def christmasEnabled = false
 
     @Value('${app.mode.hallweeen}')
-    def halloweenEnabled
+    def halloweenEnabled = true
 
     Boolean getHalloweenEnabled(){
         if (this.halloweenEnabled instanceof Boolean){
