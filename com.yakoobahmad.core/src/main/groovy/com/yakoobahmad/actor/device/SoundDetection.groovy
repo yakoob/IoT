@@ -70,7 +70,7 @@ class SoundDetection extends BaseActor {
 
             } else {
 
-                log.debug "${soundDetections.toListString()}"
+                // log.debug "${soundDetections.toListString()}"
                 // return // do not bother continuing this sub-routine if sound detection buffer isn't full
 
             }

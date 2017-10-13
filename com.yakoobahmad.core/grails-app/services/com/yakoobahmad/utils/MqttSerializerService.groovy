@@ -15,7 +15,7 @@ class MqttSerializerService {
 
     def serialize(String topic, String message) {
 
-        if (topic.contains("HomeGenie/HomeAutomation.ZWave/8/event")){
+        if (topic.contains("HomeGenie/HomeAutomation.ZWave/12/event")){
             def JsonObject = JSON.parse(message)
             if (JsonObject.Name == "Sensor.Tamper"){
                 def res = new MotionDetected()

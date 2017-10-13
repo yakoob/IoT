@@ -12,25 +12,32 @@ class Manager extends BaseActor implements GlobalConfig {
 
     def akkaService = Holders.applicationContext.getBean("akkaService")
 
-    private ActorRef projector = null
+    private ActorRef projectorPumpkins = null
+    private ActorRef projectorSam = null
     private ActorRef smokeMachine = null
     private ActorRef lighting = null
 
     Manager() {
+
         if (halloweenEnabled){
-            smokeMachine = context.system().actorOf(Props.create(com.yakoobahmad.actor.halloween.Smoke.class), "SmokeMachine")
-            projector = context.system().actorOf(Props.create(Projector.class), "Projector")
+            // smokeMachine = context.system().actorOf(Props.create(com.yakoobahmad.actor.halloween.Smoke.class), "SmokeMachine")
+            projectorPumpkins = context.system().actorOf(Props.create(Projector.class), "ProjectorPumpkins")
+            // projectorSam = context.system().actorOf(Props.create(Projector2.class), "ProjectorSam")
             lighting = context.system().actorOf(Props.create(Lighting.class), "Lighting")
+            println "Halloween manager started"
+        } else {
+            println "CAN NOT START - halloween not enabled"
         }
-        log.info "Halloween manager started"
+
     }
 
     @Override
     void onReceive(Object message) throws Exception {
         if (halloweenEnabled){
-            projector.tell(message, self)
+            projectorPumpkins.tell(message, self)
+            // projectorSam.tell(message, self)
             lighting.tell(message, self)
-            smokeMachine.tell(message, self)
+            // smokeMachine.tell(message, self)
         }
     }
 

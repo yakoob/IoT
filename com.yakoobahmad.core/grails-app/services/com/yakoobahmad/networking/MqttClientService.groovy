@@ -82,7 +82,7 @@ class MqttClientService implements MqttCallback {
                 akkaService.homeManager?.tell(message, akkaService.actorNoSender())
             }
 
-            log.debug "mqtt messageArrived >> topic:$topic | ${m.toString()}"
+            // log.debug "mqtt messageArrived >> topic:$topic | ${m.toString()}"
 
         } catch (e) {
             println e?.printStackTrace()
@@ -91,7 +91,7 @@ class MqttClientService implements MqttCallback {
 
     @Override
     public void deliveryComplete(IMqttDeliveryToken token) {
-        log.debug "mqtt deliveryComplete: ${token.toString()}"
+        // log.debug "mqtt deliveryComplete: ${token.toString()}"
     }
 
     def publish(String topic, String payload){

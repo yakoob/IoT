@@ -83,8 +83,8 @@ class FiniteStateMachine {
                     this.previousState = this.currentState
                     this.currentState = it.toState
 
-                    log.debug "fsm setPreviousState: ${this.previousState}"
-                    log.debug "fsm setCurrentState: ${this.currentState}"
+                    // log.debug "fsm setPreviousState: ${this.previousState}"
+                    // log.debug "fsm setCurrentState: ${this.currentState}"
                 }
 
             }

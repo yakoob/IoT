@@ -2,6 +2,8 @@ package com.yakoobahmad
 
 import akka.actor.ActorRef
 import com.yakoobahmad.command.halloween.BlowSmoke
+import com.yakoobahmad.command.video.Play
+import com.yakoobahmad.media.HalloweenVideo
 import groovy.util.logging.Log
 
 @Log
@@ -12,7 +14,17 @@ class TestController {
     def httpClientService
     def twitterService
 
+    def play(){
+        String name = params.video
+        akkaService.halloweenManager.tell(new Play(media: HalloweenVideo.findByName(HalloweenVideo.Name.valueOf(name.toUpperCase()))), ActorRef.noSender())
+        redirect(action: "index")
+        return
+    }
+
     def index() {
+
+        render view: '/test', model: [videos:HalloweenVideo.findAllByType(HalloweenVideo.Type.PUMPKINS)]
+        return
 
         /*
         akkaService.halloweenManager.tell(new BlowSmoke(), ActorRef.noSender())

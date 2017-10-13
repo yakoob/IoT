@@ -11,6 +11,7 @@ trait GlobalConfig {
     def halloweenEnabled = true
 
     Boolean getHalloweenEnabled(){
+        return true
         if (this.halloweenEnabled instanceof Boolean){
             return this.halloweenEnabled
         } else if (this.halloweenEnabled instanceof String) {
@@ -20,6 +21,7 @@ trait GlobalConfig {
     }
 
     Boolean getChristmasEnabled(){
+        return false
         if (this.christmasEnabled instanceof Boolean){
             return this.christmasEnabled
         } else if (this.christmasEnabled instanceof String) {

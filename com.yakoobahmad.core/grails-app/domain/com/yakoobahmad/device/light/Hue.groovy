@@ -1,4 +1,4 @@
-package com.yakoobahmad.halloween.light
+package com.yakoobahmad.device.light
 
 import com.yakoobahmad.device.Light
 import com.yakoobahmad.visualization.ColorHue

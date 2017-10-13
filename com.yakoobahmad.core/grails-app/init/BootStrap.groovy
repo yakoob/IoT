@@ -1,9 +1,9 @@
 import com.yakoobahmad.config.GlobalConfig
 import com.yakoobahmad.device.Light
 import com.yakoobahmad.device.Smoke
+import com.yakoobahmad.device.light.Hue
 import com.yakoobahmad.media.ChristmasVideo
 import com.yakoobahmad.media.HalloweenVideo
-import com.yakoobahmad.halloween.light.Hue
 import com.yakoobahmad.visualization.Color
 import com.yakoobahmad.visualization.ColorHue
 
@@ -23,7 +23,7 @@ class BootStrap implements GlobalConfig {
     private void configureModels(){
 
         configureDataHalloween()
-        configureDataChristmas()
+        // configureDataChristmas()
 
         /*
         Video.list() {
@@ -63,13 +63,10 @@ class BootStrap implements GlobalConfig {
         new ColorHue(description: Color.Name.BLACK, red: "0", green: "0", blue: "0").save(failOnError:true, flush:true)
         new ColorHue(description: Color.Name.WHITE, red: "0", green: "0", blue: "1").save(failOnError:true, flush:true)
 
-        new Hue(node: 1, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(node: 2, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(node: 3, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(node: 4, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(node: 5, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(node: 6, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(node: 7, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
+
+        new Hue(description: "HalloweenCenter", node: 4, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
+        new Hue(description: "HalloweenRight", node: 7, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
+        new Hue(description: "HalloweenLeft", node: 8, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
 
     }
 

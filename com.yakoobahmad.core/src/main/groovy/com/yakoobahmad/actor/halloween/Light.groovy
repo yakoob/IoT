@@ -10,7 +10,7 @@ import com.yakoobahmad.actor.BaseActor
 import com.yakoobahmad.command.Command
 import com.yakoobahmad.fsm.FSM
 import com.yakoobahmad.fsm.state.Off
-import com.yakoobahmad.halloween.light.Hue
+import com.yakoobahmad.device.light.Hue
 import com.yakoobahmad.visualization.Color
 import com.yakoobahmad.visualization.ColorHue
 import grails.util.Holders
@@ -60,7 +60,7 @@ class Light extends BaseActor implements FSM {
 
         } else if (message instanceof SoundDetectionCalculationComplete) {
 
-            log.debug "fsmCS:${this.fsm.currentState}"
+            // log.debug "fsmCS:${this.fsm.currentState}"
 
             double avg = message.avg?.toDouble()
             double sum = message.sum?.toDouble()
@@ -100,7 +100,6 @@ class Light extends BaseActor implements FSM {
             turnLightOn()
         }
 
-
     }
 
     void turnLightOn() {
@@ -138,16 +137,24 @@ class Light extends BaseActor implements FSM {
 
         } else if (brightnessCatagory == BrightnessCatagory.MORE && fsm.currentState == On.name) {
 
-            if (self.path().name().contains("lightPumpkinLeft")) {
-                res << colorList.find{it.description==Color.Name.PURPLE}
-            }
+            Hue.withNewSession {
 
-            if (self.path().name().contains("lightPumpkinRight")) {
-                res << colorList.find{it.description==Color.Name.ORANGE}
-            }
+                def hueLeft = Hue.findByDescription("HalloweenLeft")
+                def hueRight = Hue.findByDescription("HalloweenRight")
+                def hueCenter = Hue.findByDescription("HalloweenCenter")
 
-            if (self.path().name().contains("lightPumpkinSinging")) {
-                res << colorList.find{it.description==Color.Name.PURPLE}
+                if (self.path().name().contains(hueLeft.description)) {
+                    res << colorList.find{it.description==Color.Name.PURPLE}
+                }
+
+                if (self.path().name().contains(hueRight.description)) {
+                    res << colorList.find{it.description==Color.Name.ORANGE}
+                }
+
+                if (self.path().name().contains(hueCenter.description)) {
+                    res << colorList.find{it.description==Color.Name.PURPLE}
+                }
+
             }
 
 
@@ -170,8 +177,6 @@ class Light extends BaseActor implements FSM {
 
 
     }
-
-
 
     public enum BrightnessCatagory {
         NONE(0),SOME(25),SOME_MORE(50),HALF(125),MORE(200),FULL(255)

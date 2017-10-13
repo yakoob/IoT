@@ -41,7 +41,7 @@ class Projector extends BaseActor implements FSM {
 
     Projector(){
 
-        println "Projector initialized with : "+self?.path()?.name()
+        println "You moms, Projector initialized with : "+self?.path()?.name()
 
         HalloweenVideo.withNewSession {
             def w = HalloweenVideo.findByName(HalloweenVideo.Name.WOODS)
@@ -133,7 +133,9 @@ class Projector extends BaseActor implements FSM {
 
     private void startRandomVideoTimer(){
 
-        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.MINUTES),
+        randomVideoTimer?.cancel()
+
+        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(1, TimeUnit.MINUTES),
                 new Runnable() {
                     @Override
                     public void run() {

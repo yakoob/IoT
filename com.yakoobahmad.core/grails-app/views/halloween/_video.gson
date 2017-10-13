@@ -6,6 +6,7 @@ model {
 
 json {
     id obj.id
+    type obj.type
     name obj.name
     command obj.command
 }

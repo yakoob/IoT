@@ -8,6 +8,7 @@ import com.yakoobahmad.command.CommandableMedia
 import com.yakoobahmad.command.video.Pause
 import com.yakoobahmad.command.video.Play
 import com.yakoobahmad.command.video.Resume
+import com.yakoobahmad.event.Event
 import com.yakoobahmad.event.MediaPlaybackComplete
 import com.yakoobahmad.event.MediaPlaybackStarted
 import com.yakoobahmad.event.MotionDetected
@@ -33,16 +34,30 @@ class Projector2 extends BaseActor implements FSM {
     HalloweenVideo currentVideo
     HalloweenVideo previousVideo
 
-    HalloweenVideo idleVideo = new HalloweenVideo(name: HalloweenVideo.Name.SAM_SCARE1, type: HalloweenVideo.Type.HOLOGRAM)
-
     Cancellable randomVideoTimer
+
+    List<HalloweenVideo> scareVideos = []
+    List<HalloweenVideo> whileProjector1IdleVideos = []
+
+    HalloweenVideo getIdleVideo(){
+        Collections.shuffle(scareVideos)
+        return scareVideos.first()
+    }
 
     Projector2(){
 
         HalloweenVideo.withNewSession {
-            def w = HalloweenVideo.findByName(idleVideo.name)
-            currentVideo = w
-            idleVideo = w
+
+            def sv = HalloweenVideo.findAllByType(HalloweenVideo.Type.HOLOGRAM)
+
+            println "initialize projector2 with scare videos: " + sv?.toListString()
+
+            scareVideos.addAll(sv)
+
+            whileProjector1IdleVideos.addAll(HalloweenVideo.findAllByNameInList([HalloweenVideo.Name.SAM_NOCOSTUME, HalloweenVideo.Name.SAM_SYMPHONY]))
+
+            currentVideo = idleVideo
+
         }
 
         startStateMachine(Off)
@@ -65,12 +80,12 @@ class Projector2 extends BaseActor implements FSM {
 
             fsm.fire(message)
 
-        } else if (message instanceof MediaPlaybackComplete) {
+        } else if (message instanceof MediaPlaybackComplete && message.node == Event.Node.TWO) {
 
             self.tell(new Play(media: idleVideo), ActorRef.noSender())
 
         } else if (message instanceof MediaPlaybackStarted) {
-            if (message.media instanceof HalloweenVideo) {
+            if (message.media instanceof HalloweenVideo && message.media.type == HalloweenVideo.Type.HOLOGRAM) {
                 this.currentVideo = message.media
             }
         } else if (message instanceof MotionDetected){
@@ -171,7 +186,7 @@ class Projector2 extends BaseActor implements FSM {
     }
 
     boolean currentVideoIsIdle(){
-        return currentVideo?.name == HalloweenVideo.Name.SAM_SCARE1
+        return currentVideo?.name in scareVideos
     }
 }
 

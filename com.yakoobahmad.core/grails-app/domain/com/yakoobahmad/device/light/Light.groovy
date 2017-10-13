@@ -4,8 +4,10 @@ class Light {
 
     enum State {OFF,ON}
 
+    String description
     String node
     State state
+
 
     static mapping = {
     }
