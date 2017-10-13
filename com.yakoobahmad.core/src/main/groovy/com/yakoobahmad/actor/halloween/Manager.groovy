@@ -13,7 +13,7 @@ class Manager extends BaseActor implements GlobalConfig {
     def akkaService = Holders.applicationContext.getBean("akkaService")
 
     private ActorRef projectorPumpkins = null
-    private ActorRef projectorSam = null
+    // private ActorRef projectorSam = null
     private ActorRef smokeMachine = null
     private ActorRef lighting = null
 

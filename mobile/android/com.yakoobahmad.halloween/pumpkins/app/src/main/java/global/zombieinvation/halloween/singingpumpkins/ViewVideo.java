@@ -81,7 +81,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
         // subscribe to app topic
         try {
-            client.subscribe("halloween/video");
+            client.subscribe("halloween/video2");
             // client.subscribe("#");
         } catch (MqttException e) {
             Log.d(getClass().getCanonicalName(), "Subscribe failed with reason code = " + e.getReasonCode());
@@ -100,11 +100,6 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
         setContentView(vv);
 
-        try {
-            playWoods();
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
 
         mContext = getApplicationContext();
         instace = this;
@@ -160,33 +155,7 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
             if (video.getCommand().equals("Play")) {
 
-
-
-                if (video.getName().equals(Video.Name.WOODS)) {
-                    vid = R.raw.halloween_woods;
-                    sub = R.raw.halloween_woods_sub;
-                } else if (video.getName().equals(Video.Name.GRIM_GRINNING_GHOST)) {
-                    vid = R.raw.halloween_ggg;
-                    sub = R.raw.halloween_ggg_sub;
-                } else if (video.getName().equals(Video.Name.THIS_IS_HALLOWEEN)) {
-                    vid = R.raw.halloween_tih;
-                    sub = R.raw.halloween_tih_sub;
-                } else if (video.getName().equals(Video.Name.WHATS_THIS)) {
-                    vid = R.raw.halloween_wt;
-                    sub = R.raw.halloween_wt_sub;
-                } else if (video.getName().equals(Video.Name.KIDNAP_SANDY_CLAWS)) {
-                    vid = R.raw.halloween_knsc;
-                    sub = R.raw.halloween_knsc_sub;
-                } else if (video.getName().equals(Video.Name.MONSTER_MASH)) {
-                    vid = R.raw.halloween_mm;
-                    sub = R.raw.halloween_mm_sub;
-                } else if (video.getName().equals(Video.Name.OOGIE_BOOGIE_PUMPKINS)) {
-                    vid = R.raw.halloween_obp;
-                    sub = R.raw.halloween_obp_sub;
-                } else if (video.getName().equals(Video.Name.TIMEWARP)) {
-                    vid = R.raw.halloween_timewarp;
-                    sub = R.raw.halloween_timewarp_sub;
-                } else if (video.getName().equals(Video.Name.SAM_NOCOSTUME)) {
+                if (video.getName().equals(Video.Name.SAM_NOCOSTUME)) {
                     vid = R.raw.halloween_sam_nocostume;
                     sub = R.raw.halloween_sam_nocostume_sub;
                 }
@@ -229,41 +198,9 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                                         mediaPlayer = pMp;
 
                                         setMediaTextCallBack(sub);
-
-
                                         AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-
-                                        if (video.getName().equals(Video.Name.WOODS)) {
-
-                                            mediaPlayer.setLooping(true);
-
-                                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-                                            audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC, ADJUST_LOWER, 0);
-
-                                        } else {
-
-                                            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
-
-                                            mediaPlayer.setLooping(false);
-                                        }
-
-                                        try {
-
-                                            Gson gson = new Gson();
-                                            MqttMessage m = new MqttMessage();
-                                            video.setEvent("playbackStarted");
-                                            m.setPayload(gson.toJson(video).getBytes());
-                                            client.publish("ActorSystem/Halloween/Projector", m);
-
-                                        } catch (MqttException e) {
-                                            Log.e("MQTT", e.getMessage());
-                                        }
-
-
+                                        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC), 0);
+                                        mediaPlayer.setLooping(false);
 
                                     }
                                 });
@@ -275,10 +212,9 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                                         try {
 
                                             MqttMessage m = new MqttMessage();
-                                            String mm = "{\"command\":\"songComplete\"}";
+                                            String mm = "{\"command\":\"songComplete\",\"next\":true}";
                                             m.setPayload(mm.getBytes());
                                             client.publish("ActorSystem/Halloween/Projector", m);
-
                                             Log.d("complete", "song finished!!!");
 
                                         } catch (MqttException e) {
@@ -352,11 +288,13 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                 public void run() {
                     MqttMessage message = new MqttMessage();
                     message.setPayload(text.getText().getBytes());
+                    /*
                     try {
-                        client.publish("ActorSystem/Halloween", message);
+                        // client.publish("ActorSystem/Halloween", message);
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }
+                    */
                     Log.d("timedText fired:", text.getText());
 
                 }
@@ -461,17 +399,14 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
     }
 
     private void playWoods() throws MqttException {
-        MqttMessage m = new MqttMessage();
-        String video = "{'command':'Play','name':'WOODS'}";
-        m.setPayload(video.getBytes());
-        client.publish("halloween/video", m);
+
     }
 
     private void resetMqttClient(){
 
         if (client != null){
             try {
-                client.unsubscribe("halloween/video");
+                client.unsubscribe("halloween/video2");
                 client.close();
                 client = null;
             } catch (MqttException e) {

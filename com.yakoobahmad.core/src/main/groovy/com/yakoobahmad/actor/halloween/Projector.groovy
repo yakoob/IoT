@@ -3,6 +3,7 @@ package com.yakoobahmad.actor.halloween
 import akka.actor.ActorRef
 import akka.actor.Cancellable
 import com.yakoobahmad.actor.BaseActor
+import com.yakoobahmad.actor.HomeManager
 import com.yakoobahmad.command.Command
 import com.yakoobahmad.command.CommandableMedia
 import com.yakoobahmad.command.video.Pause
@@ -73,11 +74,26 @@ class Projector extends BaseActor implements FSM {
 
         } else if (message instanceof MediaPlaybackComplete) {
 
-            self.tell(new Play(media: woods), ActorRef.noSender())
+            if (message.next){
+                playRandomVideo()
+            } else {
+                self.tell(new Play(media: woods), ActorRef.noSender())
+            }
+
 
         } else if (message instanceof MediaPlaybackStarted) {
             if (message.media instanceof HalloweenVideo) {
+                println "Projector1 MediaPlaybackStarted: " + message.media?.dump()
                 this.currentVideo = message.media
+
+                HalloweenVideo.withNewSession {
+                    if (currentVideo.name == HalloweenVideo.Name.WOODS){
+                        println "!@#!@#!@ play tht shit"
+                        HomeManager.halloweenProjectorSam.tell("PLAY_RANDOM_VIDEO", ActorRef.noSender())
+                    }
+
+                }
+
             }
         } else if (message instanceof MotionDetected){
             if (currentVideoIsWoods()){
@@ -133,9 +149,7 @@ class Projector extends BaseActor implements FSM {
 
     private void startRandomVideoTimer(){
 
-        randomVideoTimer?.cancel()
-
-        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(1, TimeUnit.MINUTES),
+        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(10, TimeUnit.MINUTES),
                 new Runnable() {
                     @Override
                     public void run() {
@@ -178,6 +192,35 @@ class Projector extends BaseActor implements FSM {
 
     }
 
+
+    private playRandomVideo(){
+
+        HalloweenVideo.withNewSession {
+
+            def videos = HalloweenVideo.findAllByType(HalloweenVideo.Type.PUMPKINS)
+
+            if(videos?.size()){
+
+                videos.removeAll([previousVideo])
+
+                Collections.shuffle(videos)
+
+                HalloweenVideo selectedVideo = videos?.first()
+
+                log.debug "selectedVideo is ${selectedVideo.name}"
+
+                Play newPlay = new Play()
+                newPlay.media=selectedVideo
+
+
+                remoteDispatch(newPlay)
+
+
+            } else {
+                log.warn "no videos found!!!"
+            }
+        }
+    }
 
 
     private void startTwitterMentionsTimer(){

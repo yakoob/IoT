@@ -15,6 +15,9 @@ class JsonService {
         def writable = t.make(obj: domain)
         def sw = new StringWriter()
         writable.writeTo( sw )
+
+        println "json " + sw.toString()
+
         return sw.toString()
     }
 }

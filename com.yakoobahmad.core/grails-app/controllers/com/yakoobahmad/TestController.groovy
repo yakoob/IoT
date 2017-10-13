@@ -17,6 +17,7 @@ class TestController {
     def play(){
         String name = params.video
         akkaService.halloweenManager.tell(new Play(media: HalloweenVideo.findByName(HalloweenVideo.Name.valueOf(name.toUpperCase()))), ActorRef.noSender())
+        akkaService.halloweenManager.tell(new Play(media: HalloweenVideo.findByName(HalloweenVideo.Name.valueOf(name.toUpperCase()))), ActorRef.noSender())
         redirect(action: "index")
         return
     }
