@@ -71,8 +71,9 @@ class Projector2 extends BaseActor implements FSM {
 
         HalloweenVideo.withNewSession {
 
-            def videos = HalloweenVideo.findAllByType(HalloweenVideo.Type.HOLOGRAM)
-            
+            // def videos = HalloweenVideo.findAllByType(HalloweenVideo.Type.HOLOGRAM)
+            def videos = HalloweenVideo.findAllByName(HalloweenVideo.Name.SAM_SCARE4)
+
             if(videos?.size()){
 
                 videos.removeAll([previousVideo])

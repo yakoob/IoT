@@ -63,10 +63,14 @@ class BootStrap implements GlobalConfig {
         new ColorHue(description: Color.Name.BLACK, red: "0", green: "0", blue: "0").save(failOnError:true, flush:true)
         new ColorHue(description: Color.Name.WHITE, red: "0", green: "0", blue: "1").save(failOnError:true, flush:true)
 
-
-        new Hue(description: "HalloweenCenter", node: 4, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(description: "HalloweenRight", node: 7, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(description: "HalloweenLeft", node: 8, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
+        new Hue(description: "Pumpkin_1", node: 8, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Garage_1", node: 9, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Garage_2", node: 10, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Garage_3", node: 11, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Door_1", node: 12, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Door_2", node: 13, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Door_3", node: 14, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Door_4", node: 15, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
 
     }
 

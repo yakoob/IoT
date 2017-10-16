@@ -149,7 +149,7 @@ class Projector extends BaseActor implements FSM {
 
     private void startRandomVideoTimer(){
 
-        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(10, TimeUnit.MINUTES),
+        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(30, TimeUnit.MINUTES),
                 new Runnable() {
                     @Override
                     public void run() {
@@ -197,8 +197,8 @@ class Projector extends BaseActor implements FSM {
 
         HalloweenVideo.withNewSession {
 
-            def videos = HalloweenVideo.findAllByType(HalloweenVideo.Type.PUMPKINS)
-
+            def videos = HalloweenVideo.findAllByTypeAndNameNotEqual(HalloweenVideo.Type.PUMPKINS, HalloweenVideo.Name.WOODS)
+            // def videos = HalloweenVideo.findAllByName(HalloweenVideo.Name.SAM_SCARE4)
             if(videos?.size()){
 
                 videos.removeAll([previousVideo])
