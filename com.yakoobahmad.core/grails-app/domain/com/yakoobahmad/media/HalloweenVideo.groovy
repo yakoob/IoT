@@ -14,6 +14,8 @@ class HalloweenVideo implements DomainSerializable, Media {
         WHATS_THIS,
         OOGIE_BOOGIE_PUMPKINS,
         TIMEWARP,
+        THRILLER,
+        GHOSTBUSTERS,
         SAM_NOCOSTUME,
         SAM_SYMPHONY,
         SAM_SCARE1,

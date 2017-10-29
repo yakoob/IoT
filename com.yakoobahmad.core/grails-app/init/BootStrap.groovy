@@ -46,6 +46,8 @@ class BootStrap implements GlobalConfig {
         new HalloweenVideo(name: HalloweenVideo.Name.THIS_IS_HALLOWEEN, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
         new HalloweenVideo(name: HalloweenVideo.Name.OOGIE_BOOGIE_PUMPKINS, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
         new HalloweenVideo(name: HalloweenVideo.Name.TIMEWARP, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
+        new HalloweenVideo(name: HalloweenVideo.Name.THRILLER, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
+        new HalloweenVideo(name: HalloweenVideo.Name.GHOSTBUSTERS, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
 
         new HalloweenVideo(name: HalloweenVideo.Name.SAM_NOCOSTUME, type: HalloweenVideo.Type.HOLOGRAM).save(failOnError:true, flush:true)
         new HalloweenVideo(name: HalloweenVideo.Name.SAM_SYMPHONY, type: HalloweenVideo.Type.HOLOGRAM).save(failOnError:true, flush:true)
