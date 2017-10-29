@@ -64,6 +64,7 @@ class BootStrap implements GlobalConfig {
         new ColorHue(description: Color.Name.WHITE, red: "0", green: "0", blue: "1").save(failOnError:true, flush:true)
 
         new Hue(description: "Pumpkin_1", node: 8, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Front_Door", node: 16, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
         new Hue(description: "Garage_1", node: 9, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
         new Hue(description: "Garage_2", node: 10, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
         new Hue(description: "Garage_3", node: 11, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)

@@ -11,6 +11,8 @@ import groovy.util.logging.Log
 class Lighting extends BaseActor {
 
     ActorRef pumpkin1
+    ActorRef frontDoor
+
     ActorRef garage1
     ActorRef garage2
     ActorRef garage3
@@ -26,6 +28,9 @@ class Lighting extends BaseActor {
 
             def p1 = Hue.findByDescription("Pumpkin_1")
             pumpkin1 = context.system().actorOf(Props.create(Light.class, p1), p1.description)
+
+            def p0 = Hue.findByDescription("Front_Door")
+            frontDoor = context.system().actorOf(Props.create(Light.class, p0), p0.description)
 
             def g1 = Hue.findByDescription("Garage_1")
             garage1 = context.system().actorOf(Props.create(Light.class, g1), g1.description)
@@ -62,9 +67,12 @@ class Lighting extends BaseActor {
             // println "lighting : SoundDetectionCalculationComplete: " + message.dump()
 
             pumpkin1?.tell(message, self)
+            frontDoor?.tell(message, self)
+
             garage1?.tell(message, self)
             garage2?.tell(message, self)
             garage3?.tell(message, self)
+
             door1?.tell(message, self)
             door2?.tell(message, self)
             door3?.tell(message, self)
