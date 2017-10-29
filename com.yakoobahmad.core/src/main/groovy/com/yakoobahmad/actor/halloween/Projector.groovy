@@ -54,7 +54,7 @@ class Projector extends BaseActor implements FSM {
 
         configureFsmDsl()
 
-        startTwitterMentionsTimer()
+        // startTwitterMentionsTimer()
 
         startRandomVideoTimer()
 
