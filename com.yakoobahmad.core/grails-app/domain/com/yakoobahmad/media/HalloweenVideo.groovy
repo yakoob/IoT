@@ -21,7 +21,8 @@ class HalloweenVideo implements DomainSerializable, Media {
         SAM_SCARE1,
         SAM_SCARE2,
         SAM_SCARE3,
-        SAM_SCARE4
+        SAM_SCARE4,
+        MINISTRY
     }
     Name name
     String command
