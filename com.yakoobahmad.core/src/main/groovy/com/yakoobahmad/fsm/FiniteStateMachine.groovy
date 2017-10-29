@@ -69,7 +69,7 @@ class FiniteStateMachine {
 
             transitionMatches.each { Grammar it ->
 
-                log.info "[FSM:MATCH] $parent with command:($e) on currentState:(${currentState}) for grammar: (${it.toString()})"
+                // log.info "[FSM:MATCH] $parent with command:($e) on currentState:(${currentState}) for grammar: (${it.toString()})"
 
                 def result = it.transition(command)
 
