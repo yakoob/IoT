@@ -55,6 +55,13 @@ class Projector2 extends BaseActor implements FSM {
                 playRandomVideo()
 
 
+        } else if (message instanceof Play){
+
+            HalloweenVideo media = message.media
+            if (media.type == HalloweenVideo.Type.HOLOGRAM){
+                playMedia(message)
+            }
+
         } else if (message instanceof MediaPlaybackComplete) {
 
             def foo = message.clone()
@@ -64,6 +71,13 @@ class Projector2 extends BaseActor implements FSM {
 
         }
 
+    }
+
+    private playMedia(Command cmd){
+
+        HalloweenVideo.withNewSession {
+            remoteDispatch(cmd)
+        }
     }
 
 

@@ -70,7 +70,18 @@ class Projector extends BaseActor implements FSM {
 
         } else if (message instanceof Command) {
 
-            fsm.fire(message)
+            if (message.media?.type == HalloweenVideo.Type.HOLOGRAM){
+
+                self.tell(new Play(media: woods), ActorRef.noSender())
+                sleep(1000)
+                HomeManager.halloweenProjectorSam.tell(message, ActorRef.noSender())
+
+            } else {
+
+                fsm.fire(message)
+
+            }
+
 
         } else if (message instanceof MediaPlaybackComplete) {
 
@@ -88,7 +99,6 @@ class Projector extends BaseActor implements FSM {
 
                 HalloweenVideo.withNewSession {
                     if (currentVideo.name == HalloweenVideo.Name.WOODS){
-                        println "!@#!@#!@ play tht shit"
                         HomeManager.halloweenProjectorSam.tell("PLAY_RANDOM_VIDEO", ActorRef.noSender())
                     }
 
