@@ -28,7 +28,7 @@ class HalloweenVideo implements DomainSerializable, Media {
     String command
     String event
 
-    enum Type {PUMPKINS,HOLOGRAM}
+    enum Type {PUMPKINS,HOLOGRAM,DISABLED}
     Type type
 
     @Override
