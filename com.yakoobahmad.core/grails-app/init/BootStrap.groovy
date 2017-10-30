@@ -46,6 +46,8 @@ class BootStrap implements GlobalConfig {
         new HalloweenVideo(name: HalloweenVideo.Name.THIS_IS_HALLOWEEN, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
         new HalloweenVideo(name: HalloweenVideo.Name.OOGIE_BOOGIE_PUMPKINS, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
         new HalloweenVideo(name: HalloweenVideo.Name.TIMEWARP, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
+        new HalloweenVideo(name: HalloweenVideo.Name.THRILLER, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
+        new HalloweenVideo(name: HalloweenVideo.Name.GHOSTBUSTERS, type: HalloweenVideo.Type.PUMPKINS).save(failOnError:true, flush:true)
 
         new HalloweenVideo(name: HalloweenVideo.Name.SAM_NOCOSTUME, type: HalloweenVideo.Type.HOLOGRAM).save(failOnError:true, flush:true)
         new HalloweenVideo(name: HalloweenVideo.Name.SAM_SYMPHONY, type: HalloweenVideo.Type.HOLOGRAM).save(failOnError:true, flush:true)
@@ -53,6 +55,7 @@ class BootStrap implements GlobalConfig {
         new HalloweenVideo(name: HalloweenVideo.Name.SAM_SCARE2, type: HalloweenVideo.Type.HOLOGRAM).save(failOnError:true, flush:true)
         new HalloweenVideo(name: HalloweenVideo.Name.SAM_SCARE3, type: HalloweenVideo.Type.HOLOGRAM).save(failOnError:true, flush:true)
         new HalloweenVideo(name: HalloweenVideo.Name.SAM_SCARE4, type: HalloweenVideo.Type.HOLOGRAM).save(failOnError:true, flush:true)
+        new HalloweenVideo(name: HalloweenVideo.Name.MINISTRY, type: HalloweenVideo.Type.DISABLED).save(failOnError:true, flush:true)
 
         new ColorHue(description: Color.Name.PURPLE, red: "0.7117647058823499", green: "0.9724025974025973", blue: "0.9042207792207793").save(failOnError:true, flush:true)
         new ColorHue(description: Color.Name.BLUE, red: "0.6562091503267974", green: "0.9529220779220778", blue: "0.9334415584415585").save(failOnError:true, flush:true)
@@ -63,10 +66,15 @@ class BootStrap implements GlobalConfig {
         new ColorHue(description: Color.Name.BLACK, red: "0", green: "0", blue: "0").save(failOnError:true, flush:true)
         new ColorHue(description: Color.Name.WHITE, red: "0", green: "0", blue: "1").save(failOnError:true, flush:true)
 
-
-        new Hue(description: "HalloweenCenter", node: 4, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(description: "HalloweenRight", node: 7, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
-        new Hue(description: "HalloweenLeft", node: 8, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.GREEN)).save(failOnError:true, flush:true)
+        new Hue(description: "Pumpkin_1", node: 8, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Front_Door", node: 16, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Garage_1", node: 9, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Garage_2", node: 10, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Garage_3", node: 11, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Door_1", node: 12, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Door_2", node: 13, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Door_3", node: 14, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
+        new Hue(description: "Door_4", node: 15, state: Light.State.OFF, color: ColorHue.findByDescription(Color.Name.ORANGE)).save(failOnError:true, flush:true)
 
     }
 

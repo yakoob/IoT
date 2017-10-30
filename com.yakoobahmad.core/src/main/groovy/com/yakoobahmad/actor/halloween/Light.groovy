@@ -49,6 +49,7 @@ class Light extends BaseActor implements FSM {
     @Override
     void onReceive(Object message) throws Exception {
 
+        // println "light: " + message
 
         if (message instanceof String && message == "SHOW_CURRENT_STATE") {
 
@@ -139,19 +140,15 @@ class Light extends BaseActor implements FSM {
 
             Hue.withNewSession {
 
-                def hueLeft = Hue.findByDescription("HalloweenLeft")
-                def hueRight = Hue.findByDescription("HalloweenRight")
-                def hueCenter = Hue.findByDescription("HalloweenCenter")
-
-                if (self.path().name().contains(hueLeft.description)) {
+                if (self.path().name().contains("Garage")) {
                     res << colorList.find{it.description==Color.Name.PURPLE}
                 }
 
-                if (self.path().name().contains(hueRight.description)) {
+                if (self.path().name().contains("Door")) {
                     res << colorList.find{it.description==Color.Name.ORANGE}
                 }
 
-                if (self.path().name().contains(hueCenter.description)) {
+                if (self.path().name().contains("Pumpkin")) {
                     res << colorList.find{it.description==Color.Name.PURPLE}
                 }
 

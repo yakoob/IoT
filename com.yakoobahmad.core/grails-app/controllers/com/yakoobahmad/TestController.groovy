@@ -23,7 +23,7 @@ class TestController {
 
     def index() {
 
-        render view: '/test', model: [videos:HalloweenVideo.findAllByType(HalloweenVideo.Type.PUMPKINS)]
+        render view: '/test', model: [videos:HalloweenVideo.findAllByType(HalloweenVideo.Type.PUMPKINS), holograms:HalloweenVideo.findAllByType(HalloweenVideo.Type.HOLOGRAM)]
         return
 
         /*

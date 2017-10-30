@@ -37,13 +37,20 @@ class MqttSerializerService {
             Gson gson = new Gson()
 
             if (json.command == "songComplete"){
-                return new MediaPlaybackComplete()
+
+                def complete
+                if (json.next)
+                    complete = new MediaPlaybackComplete(topic: topic, next:true)
+                else
+                    complete = new MediaPlaybackComplete(topic: topic, next:false)
+                return complete
             }
 
             if (json.event == "playbackStarted"){
-                return new MediaPlaybackStarted(media:new Gson().fromJson(message, HalloweenVideo.class))
+                return new MediaPlaybackStarted(media:new Gson().fromJson(message, HalloweenVideo.class), topic: topic)
             }
         }
+
 
         if (topic.contains("ActorSystem/Christmas/Projector")){
 

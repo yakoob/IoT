@@ -14,18 +14,21 @@ class HalloweenVideo implements DomainSerializable, Media {
         WHATS_THIS,
         OOGIE_BOOGIE_PUMPKINS,
         TIMEWARP,
+        THRILLER,
+        GHOSTBUSTERS,
         SAM_NOCOSTUME,
         SAM_SYMPHONY,
         SAM_SCARE1,
         SAM_SCARE2,
         SAM_SCARE3,
-        SAM_SCARE4
+        SAM_SCARE4,
+        MINISTRY
     }
     Name name
     String command
     String event
 
-    enum Type {PUMPKINS,HOLOGRAM}
+    enum Type {PUMPKINS,HOLOGRAM,DISABLED}
     Type type
 
     @Override

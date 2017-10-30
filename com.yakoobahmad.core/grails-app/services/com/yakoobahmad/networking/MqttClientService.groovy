@@ -70,7 +70,9 @@ class MqttClientService implements MqttCallback {
 
                 akkaService.soundDetection?.tell(message, akkaService.actorNoSender())
 
-            } else if (message instanceof MediaPlaybackComplete) {
+            }
+
+            else if (message instanceof MediaPlaybackComplete) {
                 akkaService.homeManager?.tell(message, akkaService.actorNoSender())
             }
 
@@ -95,6 +97,8 @@ class MqttClientService implements MqttCallback {
     }
 
     def publish(String topic, String payload){
+        println ">>> publish topic: $topic | payload: $payload"
+
         if (mqttClient) {
             MqttMessage message=new MqttMessage()
             message.setPayload(payload.bytes)
