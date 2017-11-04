@@ -179,6 +179,14 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
                     vid = R.raw.halloween_sam_scare4;
                     sub = R.raw.halloween_sam_scare4_sub;
                 }
+                else if (video.getName().equals(Video.Name.BONEYARD_BAND)) {
+                    vid = R.raw.halloween_boneyard_band;
+                    sub = R.raw.halloween_sam_scare4_sub;
+                }
+                else if (video.getName().equals(Video.Name.BONEYARD_PUMPKIN)) {
+                    vid = R.raw.halloween_boneyard_pumpkin;
+                    sub = R.raw.halloween_sam_scare4_sub;
+                }
                 else {
                     return;
                 }

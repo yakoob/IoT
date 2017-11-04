@@ -2,7 +2,9 @@ package com.yakoobahmad.media
 
 import com.yakoobahmad.domain.media.Media
 import com.yakoobahmad.domain.utils.DomainSerializable
+import groovy.transform.EqualsAndHashCode
 
+@EqualsAndHashCode(includes = "name")
 class HalloweenVideo implements DomainSerializable, Media {
 
     enum Name {
@@ -22,7 +24,8 @@ class HalloweenVideo implements DomainSerializable, Media {
         SAM_SCARE2,
         SAM_SCARE3,
         SAM_SCARE4,
-        MINISTRY
+        BONEYARD_BAND,
+        BONEYARD_PUMPKIN
     }
     Name name
     String command

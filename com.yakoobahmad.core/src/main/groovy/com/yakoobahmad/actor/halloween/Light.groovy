@@ -140,15 +140,15 @@ class Light extends BaseActor implements FSM {
 
             Hue.withNewSession {
 
-                if (self.path().name().contains("Garage")) {
+                if (self.path().name().contains("Garage") || self.path().name().contains("left")) {
                     res << colorList.find{it.description==Color.Name.PURPLE}
                 }
 
-                if (self.path().name().contains("Door")) {
+                if (self.path().name().contains("Door") || self.path().name().contains("center")) {
                     res << colorList.find{it.description==Color.Name.ORANGE}
                 }
 
-                if (self.path().name().contains("Pumpkin")) {
+                if (self.path().name().contains("Pumpkin") || self.path().name().contains("right")) {
                     res << colorList.find{it.description==Color.Name.PURPLE}
                 }
 

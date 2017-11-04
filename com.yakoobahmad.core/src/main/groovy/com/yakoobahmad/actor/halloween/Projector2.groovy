@@ -16,6 +16,8 @@ import com.yakoobahmad.fsm.state.video.Paused
 import com.yakoobahmad.fsm.state.video.Playing
 import com.yakoobahmad.media.HalloweenVideo
 import scala.concurrent.duration.Duration
+
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 import groovy.util.logging.Slf4j
 
@@ -31,6 +33,8 @@ class Projector2 extends BaseActor implements FSM {
     Cancellable randomVideoTimer
 
     Boolean canPlay = true
+
+    CopyOnWriteArrayList<HalloweenVideo> playlistQueue = new CopyOnWriteArrayList<HalloweenVideo>()
 
     Projector2(){
         startStateMachine(Off)
@@ -75,25 +79,29 @@ class Projector2 extends BaseActor implements FSM {
 
         HalloweenVideo.withNewSession {
 
+            if (playlistQueue.size() >= HalloweenVideo.countByType(HalloweenVideo.Type.HOLOGRAM)){
+                playlistQueue.clear()
+                if (previousVideo)
+                    playlistQueue.addIfAbsent(previousVideo)
+            }
+
             def videos = HalloweenVideo.findAllByType(HalloweenVideo.Type.HOLOGRAM)
-            // def videos = HalloweenVideo.findAllByName(HalloweenVideo.Name.SAM_SCARE4)
+
+            videos.removeAll(playlistQueue)
 
             if(videos?.size()){
-
-                videos.removeAll([previousVideo])
 
                 Collections.shuffle(videos)
 
                 HalloweenVideo selectedVideo = videos?.first()
+                playlistQueue.addIfAbsent(selectedVideo)
 
                 log.debug "selectedVideo is ${selectedVideo.name}"
 
                 Play newPlay = new Play()
                 newPlay.media=selectedVideo
 
-
                 remoteDispatch(newPlay)
-
 
             } else {
                 log.warn "no videos found!!!"
@@ -123,6 +131,8 @@ class Projector2 extends BaseActor implements FSM {
     private void remoteDispatch(Command command){
 
         if (command instanceof CommandableMedia){
+
+            this.previousVideo = this.currentVideo
 
             this.currentVideo = command?.media
 

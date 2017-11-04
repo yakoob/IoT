@@ -86,6 +86,6 @@ assets {
 
 bootRun {
 
-    jvmArgs = ['-Xmx4G','-Xms1024m','-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005']
+    jvmArgs = ['-Xmx4G','-Xms2G','-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005']
 
 }

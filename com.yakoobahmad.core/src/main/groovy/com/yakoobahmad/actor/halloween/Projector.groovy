@@ -23,6 +23,7 @@ import grails.util.Holders
 import groovy.util.logging.Slf4j
 import scala.concurrent.duration.Duration
 
+import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.TimeUnit
 
 @Slf4j
@@ -30,19 +31,17 @@ class Projector extends BaseActor implements FSM {
 
     def jsonService = Holders.applicationContext.getBean("jsonService")
     def mqttClientService = Holders.applicationContext.getBean("mqttClientService")
-    def twitterService = Holders.applicationContext.getBean("twitterService")
 
     HalloweenVideo currentVideo
     HalloweenVideo previousVideo
 
     HalloweenVideo woods
 
-    Cancellable randomVideoTimer
-    Cancellable twitterMentionsTimer
+    CopyOnWriteArrayList<HalloweenVideo> playlistQueue = new CopyOnWriteArrayList<HalloweenVideo>()
 
     Projector(){
 
-        println "You moms, Projector initialized with : "+self?.path()?.name()
+        println "Projector initialized with : "+self?.path()?.name()
 
         HalloweenVideo.withNewSession {
             def w = HalloweenVideo.findByName(HalloweenVideo.Name.WOODS)
@@ -53,10 +52,6 @@ class Projector extends BaseActor implements FSM {
         startStateMachine(Off)
 
         configureFsmDsl()
-
-        // startTwitterMentionsTimer()
-
-        startRandomVideoTimer()
 
     }
 
@@ -72,8 +67,6 @@ class Projector extends BaseActor implements FSM {
 
             if (message.media?.type == HalloweenVideo.Type.HOLOGRAM){
 
-                self.tell(new Play(media: woods), ActorRef.noSender())
-                sleep(1000)
                 HomeManager.halloweenProjectorSam.tell(message, ActorRef.noSender())
 
             } else {
@@ -105,12 +98,14 @@ class Projector extends BaseActor implements FSM {
                 }
 
             }
-        } else if (message instanceof MotionDetected){
+        }
+        /*
+        else if (message instanceof MotionDetected){
             if (currentVideoIsWoods()){
-                randomVideoTimer?.cancel()
-                startRandomVideoTimer()
+                playRandomVideo()
             }
         }
+        */
 
     }
 
@@ -146,6 +141,8 @@ class Projector extends BaseActor implements FSM {
 
             this.currentVideo = command?.media
 
+            println "!!!!!! " + currentVideo.dump()
+
             if (currentVideo?.jsonTemplatePath) {
                 // send to mqtt so android can process
                 mqttClientService.publish(
@@ -157,109 +154,38 @@ class Projector extends BaseActor implements FSM {
 
     }
 
-    private void startRandomVideoTimer(){
-
-        randomVideoTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(30, TimeUnit.MINUTES),
-                new Runnable() {
-                    @Override
-                    public void run() {
-
-                        try{
-
-                            log.debug "playing random video"
-
-                            HalloweenVideo.withNewSession {
-
-                                def videos = HalloweenVideo.findAllByType(HalloweenVideo.Type.PUMPKINS)
-
-                                if(videos?.size()){
-
-                                    videos.removeAll([woods,previousVideo])
-
-                                    Collections.shuffle(videos)
-
-                                    HalloweenVideo selectedVideo = videos?.first()
-
-                                    log.debug "selectedVideo is ${selectedVideo.name}"
-
-                                    if ( currentVideoIsWoods() ){
-                                        self.tell(new Play(media: selectedVideo), ActorRef.noSender())
-                                    } else {
-                                        log.warn "can not play random video because currentVideo is not WOODS"
-                                    }
-
-                                } else {
-                                    log.warn "no videos found!!!"
-                                }
-                            }
-                        } catch(e){
-                            e.printStackTrace()
-                        }
-
-
-                    }
-                }, context.system().dispatcher())
-
-    }
-
-
     private playRandomVideo(){
 
         HalloweenVideo.withNewSession {
 
-            def videos = HalloweenVideo.findAllByTypeAndNameNotEqual(HalloweenVideo.Type.PUMPKINS, HalloweenVideo.Name.WOODS)
-            // def videos = HalloweenVideo.findAllByName(HalloweenVideo.Name.SAM_SCARE4)
-            if(videos?.size()){
+            if (playlistQueue.size() >= HalloweenVideo.countByType(HalloweenVideo.Type.PUMPKINS) - 1){
+                playlistQueue.clear()
+                if (previousVideo)
+                    playlistQueue.addIfAbsent(previousVideo)
+            }
 
-                videos.removeAll([previousVideo])
+            def videos = HalloweenVideo.findAllByTypeAndNameNotEqual(HalloweenVideo.Type.PUMPKINS, HalloweenVideo.Name.WOODS)
+
+            videos.removeAll(playlistQueue)
+
+            if(videos?.size()){
 
                 Collections.shuffle(videos)
 
                 HalloweenVideo selectedVideo = videos?.first()
+                playlistQueue.addIfAbsent(selectedVideo)
 
                 log.debug "selectedVideo is ${selectedVideo.name}"
 
                 Play newPlay = new Play()
                 newPlay.media=selectedVideo
 
-
                 remoteDispatch(newPlay)
-
 
             } else {
                 log.warn "no videos found!!!"
             }
         }
-    }
-
-
-    private void startTwitterMentionsTimer(){
-
-        twitterMentionsTimer = context.system().scheduler().schedule(Duration.Zero(), Duration.create(5, TimeUnit.SECONDS),
-            new Runnable() {
-                @Override
-                public void run() {
-
-                    if (!twitterService.enabled)
-                        return
-
-                    log.debug "tell twitter actor to try next"
-
-                    log.debug "current media: ${currentVideo.name}"
-
-                    if (currentVideoIsWoods()){
-
-                        akkaService.twitter.tell("NEXT", self)
-
-                    } else {
-                        log.debug "media in progress try again"
-                    }
-
-
-                }
-            }, context.system().dispatcher())
-
-
     }
 
     boolean currentVideoIsWoods(){

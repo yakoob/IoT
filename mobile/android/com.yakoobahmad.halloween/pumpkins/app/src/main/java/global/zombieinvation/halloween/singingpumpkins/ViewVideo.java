@@ -160,8 +160,6 @@ public class ViewVideo extends Activity implements MqttCallback, OnTimedTextList
 
             if (video.getCommand().equals("Play")) {
 
-
-
                 if (video.getName().equals(Video.Name.WOODS)) {
                     vid = R.raw.halloween_woods;
                     sub = R.raw.halloween_woods_sub;
